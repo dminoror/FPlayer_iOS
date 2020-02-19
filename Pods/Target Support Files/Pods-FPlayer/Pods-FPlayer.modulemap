@@ -1,0 +1,6 @@
+framework module Pods_FPlayer {
+  umbrella header "Pods-FPlayer-umbrella.h"
+
+  export *
+  module * { export * }
+}
