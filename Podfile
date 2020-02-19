@@ -8,5 +8,6 @@ target 'FPlayer' do
   # Pods for FPlayer
   pod 'GoogleSignIn'
   pod 'Firebase/Auth'
+  pod 'GoogleAPIClientForREST/Drive'
 
 end
