@@ -28,9 +28,13 @@ class ViewController: UIViewController, GIDSignInDelegate {
     }
     
     @IBAction func btnTest_Clicked(_ sender: Any) {
+        
+        downloadFile()
+        return
+            /*
         getFolderID(name: "OST", service: googleDriveService, user: googleUser!) { (identify) in
             print(identify)
-        }
+        }*/
     }
     
     let googleDriveService = GTLRDriveService()
@@ -43,6 +47,7 @@ class ViewController: UIViewController, GIDSignInDelegate {
             print("login success: ")
             self.googleDriveService.authorizer = user.authentication.fetcherAuthorizer()
             self.googleUser = user
+            print(GIDSignIn.sharedInstance()?.currentUser.authentication.accessToken)
         } else {
             print("login error: ", error!)
             self.googleDriveService.authorizer = nil
@@ -63,7 +68,11 @@ class ViewController: UIViewController, GIDSignInDelegate {
         
         
         let query = GTLRDriveQuery_FilesList.query()
-        query.q = "'root' in parents"
+        query.q = "'1tRJdjag-2u21uY0wyLsrtuXmPzaPwISO' in parents"
+        // ost 1E8KDO0oEhjDyZPZ5v83iz51t9rk-z3i7
+        // single 1tRJdjag-2u21uY0wyLsrtuXmPzaPwISO
+        // japan tunes 1jZmNIIjSDGqgCC2lMnS_RUZnQu8VScSV
+        
         
         //query.pageSize = 10
         service.executeQuery(query) { (_, result, error) in
@@ -73,38 +82,37 @@ class ViewController: UIViewController, GIDSignInDelegate {
             if let folderList = (result as? GTLRDrive_FileList)?.files {
                 
                 for file in folderList {
-                    print(file.name, file.mimeType)
+                    print(file.name, file.mimeType, file.identifier)
                 }
                 
             }
-            
-            
         }
+    }
+    var bytesCount: Int = 0
+    func downloadFile() {
         
-        /*
-        let query = GTLRDriveQuery_FilesList.query()
-
-        // Comma-separated list of areas the search applies to. E.g., appDataFolder, photos, drive.
-        query.spaces = "drive"
-        
-        // Comma-separated list of access levels to search in. Some possible values are "user,allTeamDrives" or "user"
-        query.corpora = "user"
+        let query = GTLRDriveQuery_FilesGet.query(withFileId: "1jZmNIIjSDGqgCC2lMnS_RUZnQu8VScSV")
+        query.downloadAsDataObjectType = "media"
+        query.additionalHTTPHeaders = ["Range":"bytes=4000000-"]
+        let ticket = googleDriveService.executeQuery(query) { (ticket, result, error) in
             
-        let withName = "name = '\(name)'" // Case insensitive!
-        let foldersOnly = "mimeType = 'application/vnd.google-apps.folder'"
-        let ownedByUser = "'\(user.profile!.email!)' in owners"
-        query.q = "\(withName) and \(foldersOnly) and \(ownedByUser)"
-        
-        service.executeQuery(query) { (_, result, error) in
             guard error == nil else {
                 fatalError(error!.localizedDescription)
             }
-                                     
-            let folderList = result as! GTLRDrive_FileList
-
-            // For brevity, assumes only one folder is returned.
-            completion(folderList.files?.first?.identifier)
-        }*/
+            print(result)
+            
+        }//7083768
+        
+        bytesCount = 0
+        ticket.objectFetcher?.accumulateDataBlock = { (data) in
+            self.bytesCount += data?.count ?? 0
+            print("data count = \(self.bytesCount)")
+        }
+    
+    }
+    
+    @objc func fileDownloaded() {
+        
     }
 
 }
