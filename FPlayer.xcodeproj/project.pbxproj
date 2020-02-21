@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4BC4A2A0606B60FF299D993E /* Pods_FPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C193E869191142FD110CF608 /* Pods_FPlayer.framework */; };
+		82BF03A923FFCA3900F852D5 /* DLResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 82BF03A423FFCA3800F852D5 /* DLResourceLoader.m */; };
+		82BF03AA23FFCA3900F852D5 /* DLProgressSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 82BF03A523FFCA3800F852D5 /* DLProgressSlider.m */; };
+		82BF03AB23FFCA3900F852D5 /* DLCachePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 82BF03A623FFCA3800F852D5 /* DLCachePlayer.m */; };
 		82CD360A23FD111200E03EE4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CD360923FD111200E03EE4 /* AppDelegate.swift */; };
 		82CD360C23FD111200E03EE4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CD360B23FD111200E03EE4 /* SceneDelegate.swift */; };
 		82CD360E23FD111200E03EE4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CD360D23FD111200E03EE4 /* ViewController.swift */; };
@@ -19,6 +22,13 @@
 
 /* Begin PBXFileReference section */
 		2F26149CA82B16205CA2A3A7 /* Pods-FPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FPlayer.release.xcconfig"; path = "Target Support Files/Pods-FPlayer/Pods-FPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		82BF03A223FFCA3800F852D5 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		82BF03A323FFCA3800F852D5 /* DLCachePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCachePlayer.h; sourceTree = "<group>"; };
+		82BF03A423FFCA3800F852D5 /* DLResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLResourceLoader.m; sourceTree = "<group>"; };
+		82BF03A523FFCA3800F852D5 /* DLProgressSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLProgressSlider.m; sourceTree = "<group>"; };
+		82BF03A623FFCA3800F852D5 /* DLCachePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLCachePlayer.m; sourceTree = "<group>"; };
+		82BF03A723FFCA3800F852D5 /* DLResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLResourceLoader.h; sourceTree = "<group>"; };
+		82BF03A823FFCA3800F852D5 /* DLProgressSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLProgressSlider.h; sourceTree = "<group>"; };
 		82CD360623FD111200E03EE4 /* FPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82CD360923FD111200E03EE4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		82CD360B23FD111200E03EE4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +54,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		82BF03A123FFCA2100F852D5 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				82BF03A323FFCA3800F852D5 /* DLCachePlayer.h */,
+				82BF03A623FFCA3800F852D5 /* DLCachePlayer.m */,
+				82BF03A823FFCA3800F852D5 /* DLProgressSlider.h */,
+				82BF03A523FFCA3800F852D5 /* DLProgressSlider.m */,
+				82BF03A723FFCA3800F852D5 /* DLResourceLoader.h */,
+				82BF03A423FFCA3800F852D5 /* DLResourceLoader.m */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
 		82CD35FD23FD111200E03EE4 = {
 			isa = PBXGroup;
 			children = (
@@ -65,9 +88,11 @@
 		82CD360823FD111200E03EE4 /* FPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				82BF03A123FFCA2100F852D5 /* Player */,
 				82CD360923FD111200E03EE4 /* AppDelegate.swift */,
 				82CD360B23FD111200E03EE4 /* SceneDelegate.swift */,
 				82CD360D23FD111200E03EE4 /* ViewController.swift */,
+				82BF03A223FFCA3800F852D5 /* Bridging-Header.h */,
 				82CD360F23FD111200E03EE4 /* Main.storyboard */,
 				82CD361223FD111400E03EE4 /* Assets.xcassets */,
 				82CD361423FD111400E03EE4 /* LaunchScreen.storyboard */,
@@ -129,6 +154,7 @@
 				TargetAttributes = {
 					82CD360523FD111200E03EE4 = {
 						CreatedOnToolsVersion = 11.3;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -228,8 +254,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82BF03A923FFCA3900F852D5 /* DLResourceLoader.m in Sources */,
+				82BF03AB23FFCA3900F852D5 /* DLCachePlayer.m in Sources */,
 				82CD360E23FD111200E03EE4 /* ViewController.swift in Sources */,
 				82CD360A23FD111200E03EE4 /* AppDelegate.swift in Sources */,
+				82BF03AA23FFCA3900F852D5 /* DLProgressSlider.m in Sources */,
 				82CD360C23FD111200E03EE4 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -375,6 +404,7 @@
 			baseConfigurationReference = D6922C82479294881D36C8F4 /* Pods-FPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GBEAX8CF24;
 				INFOPLIST_FILE = FPlayer/Info.plist;
@@ -385,6 +415,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dminoror.FPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FPlayer/Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -395,6 +427,7 @@
 			baseConfigurationReference = 2F26149CA82B16205CA2A3A7 /* Pods-FPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GBEAX8CF24;
 				INFOPLIST_FILE = FPlayer/Info.plist;
@@ -405,6 +438,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dminoror.FPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FPlayer/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

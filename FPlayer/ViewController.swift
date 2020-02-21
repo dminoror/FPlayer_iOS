@@ -12,7 +12,41 @@ import GoogleSignIn
 import GoogleAPIClientForREST
 import GTMSessionFetcher
 
-class ViewController: UIViewController, GIDSignInDelegate {
+class ViewController: UIViewController, GIDSignInDelegate, DLCachePlayerDataDelegate, DLCachePlayerStateDelegate {
+    func playerPlayerItemChanged(_ playerItem: AVPlayerItem!) {
+        
+    }
+    
+    func playerDidReachEnd(_ playerItem: AVPlayerItem!) {
+        
+    }
+    
+    func playerDidPlayStateChanged(_ state: DLCachePlayerPlayState) {
+        
+    }
+    
+    func playerReadyToPlay() {
+        
+    }
+    
+    func playerFail(toPlay error: Error!) {
+        
+    }
+    
+    func playerPlayingChanged(_ isPlaying: Bool) {
+        
+    }
+    
+    
+    func playerGetCurrentPlayURL(_ block: ((URL?, Bool) -> AVPlayerItem?)!) {
+        let url = URL(string: "https://www.googleapis.com/drive/v3/files/1a6W8RFgIn8lsbRNLrdbUa0h_kvr23Kg3?alt=media") as! URL
+        block(url, true)
+    }
+    
+    func playerGetPreloadPlayURL(_ block: ((URL?, Bool) -> AVPlayerItem?)!) {
+        block(nil, true)
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,13 +59,18 @@ class ViewController: UIViewController, GIDSignInDelegate {
         GIDSignIn.sharedInstance()?.scopes = [kGTLRAuthScopeDrive]
         GIDSignIn.sharedInstance()?.presentingViewController = self
         GIDSignIn.sharedInstance()?.signIn()
+        
+        DLCachePlayer.sharedInstance()?.setDelegate(self)
     }
     
     @IBAction func btnTest_Clicked(_ sender: Any) {
         
-        downloadFile()
-        return
-            /*
+        DLCachePlayer.sharedInstance()?.resetAndPlay()
+        
+        
+        //downloadFile()
+          
+        /*
         getFolderID(name: "OST", service: googleDriveService, user: googleUser!) { (identify) in
             print(identify)
         }*/
@@ -72,7 +111,7 @@ class ViewController: UIViewController, GIDSignInDelegate {
         // ost 1E8KDO0oEhjDyZPZ5v83iz51t9rk-z3i7
         // single 1tRJdjag-2u21uY0wyLsrtuXmPzaPwISO
         // japan tunes 1jZmNIIjSDGqgCC2lMnS_RUZnQu8VScSV
-        
+        // 旅行途中 1a6W8RFgIn8lsbRNLrdbUa0h_kvr23Kg3
         
         //query.pageSize = 10
         service.executeQuery(query) { (_, result, error) in
