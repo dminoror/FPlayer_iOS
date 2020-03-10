@@ -3,3 +3,4 @@
 //
 
 #import "DLCachePlayer.h"
+#import "DLProgressSlider.h"
