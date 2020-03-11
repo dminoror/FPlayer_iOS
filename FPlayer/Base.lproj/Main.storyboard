@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2Wu-3j-CWX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lR3-XP-5So">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -91,14 +91,24 @@
                                     <outlet property="delegate" destination="lR3-XP-5So" id="imS-zt-fMH"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K7C-1I-eTb" customClass="MiniPlayerView" customModule="FPlayer" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="782" width="414" height="80"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="uhf-EI-fUo"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="HYz-KN-3xA" firstAttribute="bottom" secondItem="K7C-1I-eTb" secondAttribute="bottom" id="96m-0h-1Tm"/>
+                            <constraint firstItem="K7C-1I-eTb" firstAttribute="centerX" secondItem="HYz-KN-3xA" secondAttribute="centerX" id="Ccp-1b-lbV"/>
                             <constraint firstItem="vNP-LS-peJ" firstAttribute="top" secondItem="HYz-KN-3xA" secondAttribute="top" id="M4G-b1-c3W"/>
                             <constraint firstItem="vNP-LS-peJ" firstAttribute="centerX" secondItem="HYz-KN-3xA" secondAttribute="centerX" id="Tbh-9U-Phi"/>
                             <constraint firstItem="hIF-Rk-hsf" firstAttribute="centerX" secondItem="HYz-KN-3xA" secondAttribute="centerX" id="UVz-kF-KWF"/>
                             <constraint firstItem="hIF-Rk-hsf" firstAttribute="width" secondItem="iYb-Fr-YvZ" secondAttribute="width" id="aAD-pe-CX8"/>
                             <constraint firstItem="hIF-Rk-hsf" firstAttribute="top" secondItem="vNP-LS-peJ" secondAttribute="bottom" id="gQG-0C-Usr"/>
+                            <constraint firstItem="K7C-1I-eTb" firstAttribute="width" secondItem="iYb-Fr-YvZ" secondAttribute="width" id="ls0-cz-Mm5"/>
                             <constraint firstItem="vNP-LS-peJ" firstAttribute="width" secondItem="iYb-Fr-YvZ" secondAttribute="width" id="m8K-3r-UFv"/>
                             <constraint firstItem="HYz-KN-3xA" firstAttribute="bottom" secondItem="hIF-Rk-hsf" secondAttribute="bottom" constant="100" id="xWO-HV-XO8"/>
                         </constraints>

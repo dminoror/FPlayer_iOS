@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4BC4A2A0606B60FF299D993E /* Pods_FPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C193E869191142FD110CF608 /* Pods_FPlayer.framework */; };
+		82009FD62418F16700A1D0A5 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82009FD52418F16700A1D0A5 /* MiniPlayerView.swift */; };
 		82AB6377240FAB3E0033039A /* PlayerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AB6376240FAB3E0033039A /* PlayerPage.swift */; };
 		82AB637A240FAC5B0033039A /* StoryboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AB6379240FAC5B0033039A /* StoryboardExtension.swift */; };
 		82BF03A923FFCA3900F852D5 /* DLResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 82BF03A423FFCA3800F852D5 /* DLResourceLoader.m */; };
@@ -22,10 +23,12 @@
 		82CD361323FD111400E03EE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82CD361223FD111400E03EE4 /* Assets.xcassets */; };
 		82CD361623FD111400E03EE4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82CD361423FD111400E03EE4 /* LaunchScreen.storyboard */; };
 		82CD361E23FD179300E03EE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82CD361D23FD179300E03EE4 /* GoogleService-Info.plist */; };
+		82F943492417A3CF00CA88FC /* MiniPlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82F943482417A3CF00CA88FC /* MiniPlayerView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2F26149CA82B16205CA2A3A7 /* Pods-FPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FPlayer.release.xcconfig"; path = "Target Support Files/Pods-FPlayer/Pods-FPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		82009FD52418F16700A1D0A5 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		82AB6376240FAB3E0033039A /* PlayerPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPage.swift; sourceTree = "<group>"; };
 		82AB6379240FAC5B0033039A /* StoryboardExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardExtension.swift; sourceTree = "<group>"; };
 		82BF03A223FFCA3800F852D5 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
@@ -46,6 +49,7 @@
 		82CD361523FD111400E03EE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		82CD361723FD111400E03EE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82CD361D23FD179300E03EE4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		82F943482417A3CF00CA88FC /* MiniPlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MiniPlayerView.xib; sourceTree = "<group>"; };
 		C193E869191142FD110CF608 /* Pods_FPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6922C82479294881D36C8F4 /* Pods-FPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FPlayer.debug.xcconfig"; path = "Target Support Files/Pods-FPlayer/Pods-FPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,6 +66,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		82009FD32418F14500A1D0A5 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				82009FD42418F15000A1D0A5 /* Views */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		82009FD42418F15000A1D0A5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				82F943482417A3CF00CA88FC /* MiniPlayerView.xib */,
+				82009FD52418F16700A1D0A5 /* MiniPlayerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		82AB6378240FAC390033039A /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -112,6 +133,7 @@
 		82CD360823FD111200E03EE4 /* FPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				82009FD32418F14500A1D0A5 /* UI */,
 				82AB6378240FAC390033039A /* Utilities */,
 				82BF03AE23FFD8C500F852D5 /* Objects */,
 				82BF03A123FFCA2100F852D5 /* Player */,
@@ -209,6 +231,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82F943492417A3CF00CA88FC /* MiniPlayerView.xib in Resources */,
 				82CD361623FD111400E03EE4 /* LaunchScreen.storyboard in Resources */,
 				82CD361E23FD179300E03EE4 /* GoogleService-Info.plist in Resources */,
 				82CD361323FD111400E03EE4 /* Assets.xcassets in Resources */,
@@ -286,6 +309,7 @@
 				82BF03AB23FFCA3900F852D5 /* DLCachePlayer.m in Sources */,
 				82CD360E23FD111200E03EE4 /* ViewController.swift in Sources */,
 				82CD360A23FD111200E03EE4 /* AppDelegate.swift in Sources */,
+				82009FD62418F16700A1D0A5 /* MiniPlayerView.swift in Sources */,
 				82BF03AA23FFCA3900F852D5 /* DLProgressSlider.m in Sources */,
 				82AB6377240FAB3E0033039A /* PlayerPage.swift in Sources */,
 				82BF03AD23FFCF4500F852D5 /* HomePage.swift in Sources */,
