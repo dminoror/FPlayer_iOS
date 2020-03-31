@@ -9,6 +9,7 @@
 #import "DLResourceLoader.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "DLCachePlayer.h"
+#import <GoogleSignIn/GoogleSignIn.h>
 
 #define LOG_LOCK NO
 
@@ -23,7 +24,7 @@
     NSLock * lock;
 }
 @synthesize tasks, totalLength;
-@synthesize finished, canceled;
+@synthesize finished, canceled, gotMetadata;
 
 - (void)dealloc
 {
@@ -41,6 +42,7 @@
         lock = [NSLock new];
         finished = NO;
         canceled = NO;
+        gotMetadata = NO;
     }
     return self;
 }
@@ -111,6 +113,10 @@
 
 - (void)addLoadingRequest:(AVAssetResourceLoadingRequest *)loadingRequest
 {
+    if (loadingRequest.dataRequest.requestedOffset >= totalLength && totalLength != 0) {
+        [loadingRequest finishLoadingWithError:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorCancelled userInfo:nil]];
+        return;
+    }
     BOOL canCutLine = YES;
     if (loadingRequest.dataRequest.requestsAllDataToEndOfResource)
     {
@@ -171,9 +177,17 @@
         }
         else if (loadingRequest.dataRequest.requestedOffset >= task.requestOffset) // 播放要求位於任一當前 task 之中
         {
+            NSUInteger requestEnd = loadingRequest.dataRequest.requestedOffset + loadingRequest.dataRequest.requestedLength;
             if (task.isLoading)
             {
                 [self responseRequestList:task];
+                return;
+            }
+            else if (requestEnd <= task.requestEnd) {
+                NSError * error;
+                task.fileHandle = [NSFileHandle fileHandleForUpdatingURL:task.tempFileURL error:&error];
+                [self responseRequestList:task];
+                [task.fileHandle closeFile];
                 return;
             }
             else
@@ -208,8 +222,11 @@
     [request addValue:@"application/json; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
     [request addValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request addValue:@"no-cache" forHTTPHeaderField:@"Cache-Control"];
-    [request addValue:@"org.cocoapods.GoogleAPIClientForREST/1.3.11 google-api-objc-client/3.0 iPhone/12.0.1 hw/iPhone9_3 (gzip)" forHTTPHeaderField:@"User-Agent"];
-    [request addValue:@"Bearer ya29.Il-_B_7_gU8iUt8gaeDW8l5ZHevfi2rPgxmnnz0Suv4fMNFSIimbqnt6fEqXKwQXXL2Rc0tuLqE0jx_xwfoQsLjZBuEJC3Z8YXhtGNUaCOT_aGcPE38LFcr_RTXVzFjbIA" forHTTPHeaderField:@"Authorization"];
+    //[request addValue:@"org.cocoapods.GoogleAPIClientForREST/1.3.11 google-api-objc-client/3.0 iPhone/12.0.1 hw/iPhone9_3 (gzip)" forHTTPHeaderField:@"User-Agent"];
+    if ([url.absoluteString containsString:@"www.googleapis.com/drive"]) {
+        NSString *token = [[[[GIDSignIn sharedInstance] currentUser] authentication] accessToken];
+        [request addValue:[NSString stringWithFormat:@"Bearer %@", token] forHTTPHeaderField:@"Authorization"];
+    }
     if (start > 0)
     {
         if (end == 0)
@@ -319,6 +336,9 @@
     NSString * fileLength = [[contentRange componentsSeparatedByString:@"/"] lastObject];
     totalLength = fileLength.integerValue > 0 ? fileLength.integerValue : response.expectedContentLength;
     loadingTask.response = httpResponse;
+    if (loadingTask.requestEnd == 0) {
+        loadingTask.requestEnd = totalLength;
+    }
 }
 
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
@@ -386,6 +406,12 @@
     }
     else
     {
+        if (!gotMetadata && self.playerItem.asset.commonMetadata.count > 0) {
+            if ([self.delegate respondsToSelector:@selector(loader:gotMetadata:)]) {
+                [self.delegate loader:self gotMetadata:self.playerItem.asset.commonMetadata];
+            }
+            gotMetadata = YES;
+        }
         [lock lock];
         [self mergeTaskData];
         NSData * data = [self finishCacheData];
@@ -472,7 +498,6 @@
                 lastTask.requestEnd = task.requestOffset;
                 loadingTask = lastTask;
                 loadingTask.isLoading = YES;
-                
             }
             return nil;
         }

@@ -323,6 +323,9 @@
     }
     downloadState = DLCachePlayerDownloadStateIdle;
 }
+- (void)loader:(DLResourceLoader *)loader gotMetadata:(NSArray<AVMetadataItem *> *)metadata {
+    [self playerGotMetadata:metadata];
+}
 - (void)loader:(DLResourceLoader *)loader loadingProgress:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes
 {
     BOOL isCurrent = [loader isEqual:currentLoader];
@@ -373,7 +376,6 @@
         {
             [newPlayerItem addObserver:self forKeyPath:@"loadedTimeRanges" options:NSKeyValueObservingOptionNew context:nil];
             [newPlayerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-            
             [self playerPlayerItemChanged:newPlayerItem];
         }
     }
@@ -454,6 +456,11 @@
     if ([self.delegate respondsToSelector:@selector(playerCacheProgress:isCurrent:tasks:totalBytes:)])
     {
         [self.delegate playerCacheProgress:playerItem isCurrent:isCurrent tasks:tasks totalBytes:totalBytes];
+    }
+}
+- (void)playerGotMetadata:(NSArray<AVMetadataItem*>*)metadatas {
+    if ([self.delegate respondsToSelector:@selector(playerGotMetadata:)]) {
+        [self.delegate playerGotMetadata:metadatas];
     }
 }
 

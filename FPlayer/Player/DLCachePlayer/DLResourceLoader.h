@@ -14,6 +14,7 @@
 @optional
 - (void)loader:(DLResourceLoader *)loader loadingSuccess:(NSData *)data url:(NSURL *)url;
 - (void)loader:(DLResourceLoader *)loader loadingFailWithError:(NSError *)error url:(NSURL *)url;
+- (void)loader:(DLResourceLoader *)loader gotMetadata:(NSArray<AVMetadataItem *>*)metadatas;
 - (void)loader:(DLResourceLoader *)loader loadingProgress:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes;
 @end
 
@@ -27,6 +28,7 @@
 
 @property (nonatomic, assign, readonly) BOOL finished;
 @property (nonatomic, assign, readonly) BOOL canceled;
+@property (nonatomic, assign, readonly) BOOL gotMetadata;
 
 - (void)stopLoading;
 

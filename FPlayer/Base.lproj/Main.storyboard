@@ -85,17 +85,16 @@
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hIF-Rk-hsf">
                                 <rect key="frame" x="0.0" y="88" width="414" height="674"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="lR3-XP-5So" id="5uv-sq-VYQ"/>
                                     <outlet property="delegate" destination="lR3-XP-5So" id="imS-zt-fMH"/>
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K7C-1I-eTb" customClass="MiniPlayerView" customModule="FPlayer" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="782" width="414" height="80"/>
+                                <rect key="frame" x="0.0" y="802" width="414" height="60"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="uhf-EI-fUo"/>
+                                    <constraint firstAttribute="height" constant="60" id="uhf-EI-fUo"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -127,7 +126,7 @@
         <!--Player Page-->
         <scene sceneID="rpX-fv-MZj">
             <objects>
-                <viewController id="2Wu-3j-CWX" customClass="PlayerPage" customModule="FPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FullPlayerPage" id="2Wu-3j-CWX" customClass="PlayerPage" customModule="FPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lMG-jZ-05k">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -214,6 +213,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="tur-Ct-tqb"/>
                                 </constraints>
+                                <color key="minimumTrackTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="maximumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3p-oV-ece">
                                 <rect key="frame" x="20" y="750" width="39" height="17"/>

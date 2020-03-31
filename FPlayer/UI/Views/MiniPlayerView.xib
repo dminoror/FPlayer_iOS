@@ -22,42 +22,57 @@
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yZz-7l-zaM">
                     <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                     <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <gestureRecognizers/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="yZz-7l-zaM" secondAttribute="height" multiplier="1:1" id="HFw-Gh-v5I"/>
-                        <constraint firstAttribute="width" constant="80" id="cMx-IG-6p4"/>
                     </constraints>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G63-Uk-dDy">
                     <rect key="frame" x="358" y="16" width="48" height="48"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="G63-Uk-dDy" secondAttribute="height" multiplier="1:1" id="K49-Sg-ecE"/>
-                        <constraint firstAttribute="width" constant="48" id="iIP-ZY-SxH"/>
                     </constraints>
                     <state key="normal" title="Button" image="playIcon"/>
+                    <connections>
+                        <action selector="playButton_Clicked:" destination="-1" eventType="touchUpInside" id="lHy-WJ-sfI"/>
+                    </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label 123" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U3A-LZ-e0l">
-                    <rect key="frame" x="88" y="16" width="262" height="48"/>
+                    <rect key="frame" x="88" y="4" width="262" height="72"/>
                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="U3A-LZ-e0l" firstAttribute="leading" secondItem="yZz-7l-zaM" secondAttribute="trailing" constant="8" id="1Ts-4T-dPx"/>
                 <constraint firstItem="yZz-7l-zaM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="648-aL-N1u"/>
                 <constraint firstItem="G63-Uk-dDy" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="CF9-A6-5Cz"/>
-                <constraint firstItem="U3A-LZ-e0l" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="CQQ-0O-dur"/>
+                <constraint firstItem="U3A-LZ-e0l" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="4" id="CQQ-0O-dur"/>
                 <constraint firstItem="G63-Uk-dDy" firstAttribute="leading" secondItem="U3A-LZ-e0l" secondAttribute="trailing" constant="8" id="GXx-uf-HuS"/>
                 <constraint firstAttribute="trailing" secondItem="G63-Uk-dDy" secondAttribute="trailing" constant="8" id="TFd-Hw-xvc"/>
-                <constraint firstAttribute="bottom" secondItem="U3A-LZ-e0l" secondAttribute="bottom" constant="16" id="pLX-wA-OE3"/>
-                <constraint firstItem="yZz-7l-zaM" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="taP-PI-wJh"/>
+                <constraint firstAttribute="bottom" secondItem="G63-Uk-dDy" secondAttribute="bottom" constant="16" id="ZNl-Qr-nIM"/>
+                <constraint firstItem="yZz-7l-zaM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="bId-NZ-18Q"/>
+                <constraint firstItem="G63-Uk-dDy" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="dKK-8x-pkT"/>
+                <constraint firstAttribute="bottom" secondItem="yZz-7l-zaM" secondAttribute="bottom" id="gxO-KI-XJ2"/>
+                <constraint firstAttribute="bottom" secondItem="U3A-LZ-e0l" secondAttribute="bottom" constant="4" id="pLX-wA-OE3"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="OSn-s4-dVR" appends="YES" id="A3K-4I-fCx"/>
+            </connections>
             <point key="canvasLocation" x="131.8840579710145" y="160.04464285714286"/>
         </view>
+        <tapGestureRecognizer id="OSn-s4-dVR">
+            <connections>
+                <action selector="miniPlayer_Clicked:" destination="-1" id="sAz-m7-dfD"/>
+                <outlet property="delegate" destination="iN0-l3-epB" id="3Xh-nK-bYq"/>
+            </connections>
+        </tapGestureRecognizer>
     </objects>
     <resources>
         <image name="playIcon" width="256" height="256"/>

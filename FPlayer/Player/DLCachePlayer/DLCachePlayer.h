@@ -31,16 +31,17 @@ typedef NS_ENUM(NSInteger, DLCachePlayerPlayState) {
 @protocol DLCachePlayerDataDelegate <NSObject>
 @required
 - (void)playerGetCurrentPlayURL:(AVPlayerItem * (^)(NSURL * url, BOOL cache))block;
-- (void)playerGetPreloadPlayURL:(AVPlayerItem * (^)(NSURL * url, BOOL cache))block;
 @optional
+- (void)playerGetPreloadPlayURL:(AVPlayerItem * (^)(NSURL * url, BOOL cache))block;
 - (void)playerCacheProgress:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent tasks:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes;
 - (void)playerDidFinishCache:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent data:(NSData *)data;
 - (void)playerDidFail:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent error:(NSError *)error;
+- (void)playerGotMetadata:(NSArray<AVMetadataItem *>*)metadatas;
 
 @end
 
 @protocol DLCachePlayerStateDelegate <NSObject>
-
+@optional
 - (void)playerPlayerItemChanged:(AVPlayerItem *)playerItem;
 - (void)playerDidReachEnd:(AVPlayerItem *)playerItem;
 - (void)playerDidPlayStateChanged:(DLCachePlayerPlayState)state;

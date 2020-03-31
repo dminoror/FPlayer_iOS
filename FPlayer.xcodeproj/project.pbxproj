@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		4BC4A2A0606B60FF299D993E /* Pods_FPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C193E869191142FD110CF608 /* Pods_FPlayer.framework */; };
 		82009FD62418F16700A1D0A5 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82009FD52418F16700A1D0A5 /* MiniPlayerView.swift */; };
+		823681922420D6E80060B472 /* PlayerCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823681912420D6E80060B472 /* PlayerCore.swift */; };
+		82491FDA2424C8E7001B33EC /* PlayerObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82491FD92424C8E7001B33EC /* PlayerObjects.swift */; };
+		82491FDC2424CB03001B33EC /* ParseUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82491FDB2424CB03001B33EC /* ParseUtility.swift */; };
 		82AB6377240FAB3E0033039A /* PlayerPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AB6376240FAB3E0033039A /* PlayerPage.swift */; };
 		82AB637A240FAC5B0033039A /* StoryboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AB6379240FAC5B0033039A /* StoryboardExtension.swift */; };
 		82BF03A923FFCA3900F852D5 /* DLResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 82BF03A423FFCA3800F852D5 /* DLResourceLoader.m */; };
@@ -29,6 +32,9 @@
 /* Begin PBXFileReference section */
 		2F26149CA82B16205CA2A3A7 /* Pods-FPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FPlayer.release.xcconfig"; path = "Target Support Files/Pods-FPlayer/Pods-FPlayer.release.xcconfig"; sourceTree = "<group>"; };
 		82009FD52418F16700A1D0A5 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
+		823681912420D6E80060B472 /* PlayerCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCore.swift; sourceTree = "<group>"; };
+		82491FD92424C8E7001B33EC /* PlayerObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerObjects.swift; sourceTree = "<group>"; };
+		82491FDB2424CB03001B33EC /* ParseUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseUtility.swift; sourceTree = "<group>"; };
 		82AB6376240FAB3E0033039A /* PlayerPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerPage.swift; sourceTree = "<group>"; };
 		82AB6379240FAC5B0033039A /* StoryboardExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardExtension.swift; sourceTree = "<group>"; };
 		82BF03A223FFCA3800F852D5 /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
@@ -69,6 +75,7 @@
 		82009FD32418F14500A1D0A5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				823AC728242CB7DE00AABA53 /* Pages */,
 				82009FD42418F15000A1D0A5 /* Views */,
 			);
 			path = UI;
@@ -83,15 +90,16 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		82AB6378240FAC390033039A /* Utilities */ = {
+		823AC728242CB7DE00AABA53 /* Pages */ = {
 			isa = PBXGroup;
 			children = (
-				82AB6379240FAC5B0033039A /* StoryboardExtension.swift */,
+				82AB6376240FAB3E0033039A /* PlayerPage.swift */,
+				82BF03AC23FFCF4500F852D5 /* HomePage.swift */,
 			);
-			path = Utilities;
+			path = Pages;
 			sourceTree = "<group>";
 		};
-		82BF03A123FFCA2100F852D5 /* Player */ = {
+		82491FD82424C8CE001B33EC /* DLCachePlayer */ = {
 			isa = PBXGroup;
 			children = (
 				82BF03A323FFCA3800F852D5 /* DLCachePlayer.h */,
@@ -100,6 +108,25 @@
 				82BF03A523FFCA3800F852D5 /* DLProgressSlider.m */,
 				82BF03A723FFCA3800F852D5 /* DLResourceLoader.h */,
 				82BF03A423FFCA3800F852D5 /* DLResourceLoader.m */,
+			);
+			path = DLCachePlayer;
+			sourceTree = "<group>";
+		};
+		82AB6378240FAC390033039A /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				82AB6379240FAC5B0033039A /* StoryboardExtension.swift */,
+				82491FDB2424CB03001B33EC /* ParseUtility.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		82BF03A123FFCA2100F852D5 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				82491FD82424C8CE001B33EC /* DLCachePlayer */,
+				823681912420D6E80060B472 /* PlayerCore.swift */,
+				82491FD92424C8E7001B33EC /* PlayerObjects.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -140,8 +167,6 @@
 				82CD360923FD111200E03EE4 /* AppDelegate.swift */,
 				82CD360B23FD111200E03EE4 /* SceneDelegate.swift */,
 				82CD360D23FD111200E03EE4 /* ViewController.swift */,
-				82AB6376240FAB3E0033039A /* PlayerPage.swift */,
-				82BF03AC23FFCF4500F852D5 /* HomePage.swift */,
 				82BF03A223FFCA3800F852D5 /* Bridging-Header.h */,
 				82CD360F23FD111200E03EE4 /* Main.storyboard */,
 				82CD361223FD111400E03EE4 /* Assets.xcassets */,
@@ -309,12 +334,15 @@
 				82BF03AB23FFCA3900F852D5 /* DLCachePlayer.m in Sources */,
 				82CD360E23FD111200E03EE4 /* ViewController.swift in Sources */,
 				82CD360A23FD111200E03EE4 /* AppDelegate.swift in Sources */,
+				82491FDA2424C8E7001B33EC /* PlayerObjects.swift in Sources */,
 				82009FD62418F16700A1D0A5 /* MiniPlayerView.swift in Sources */,
 				82BF03AA23FFCA3900F852D5 /* DLProgressSlider.m in Sources */,
 				82AB6377240FAB3E0033039A /* PlayerPage.swift in Sources */,
 				82BF03AD23FFCF4500F852D5 /* HomePage.swift in Sources */,
 				82CD360C23FD111200E03EE4 /* SceneDelegate.swift in Sources */,
+				823681922420D6E80060B472 /* PlayerCore.swift in Sources */,
 				82AB637A240FAC5B0033039A /* StoryboardExtension.swift in Sources */,
+				82491FDC2424CB03001B33EC /* ParseUtility.swift in Sources */,
 				82BF03B023FFD8E600F852D5 /* GDObjects.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -31,6 +31,9 @@ class MiniPlayerView: UIView {
         xibView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
     
+    @IBAction func miniPlayer_Clicked(_ sender: Any) {
+        NotificationCenter.default.post(name: NSNotification.Name("didMiniPlayerClicked"), object: nil)
+    }
     
     @IBAction func playButton_Clicked(_ sender: Any) {
         

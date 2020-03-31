@@ -48,7 +48,7 @@ enum IconType: String {
     case gdfolder = "googleDriveFolderIcon"
     case flac = "flacIcon"
     case m4a = "aacIcon"
-    case mp3 = "mp3"
+    case mp3 = "mp3Icon"
 }
 
 extension GTLRDrive_File {

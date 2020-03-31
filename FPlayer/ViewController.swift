@@ -12,40 +12,7 @@ import GoogleSignIn
 import GoogleAPIClientForREST
 import GTMSessionFetcher
 
-class ViewController: UIViewController, GIDSignInDelegate, DLCachePlayerDataDelegate, DLCachePlayerStateDelegate {
-    func playerPlayerItemChanged(_ playerItem: AVPlayerItem!) {
-        
-    }
-    
-    func playerDidReachEnd(_ playerItem: AVPlayerItem!) {
-        
-    }
-    
-    func playerDidPlayStateChanged(_ state: DLCachePlayerPlayState) {
-        
-    }
-    
-    func playerReadyToPlay() {
-        
-    }
-    
-    func playerFail(toPlay error: Error!) {
-        
-    }
-    
-    func playerPlayingChanged(_ isPlaying: Bool) {
-        
-    }
-    
-    
-    func playerGetCurrentPlayURL(_ block: ((URL?, Bool) -> AVPlayerItem?)!) {
-        let url = URL(string: "https://www.googleapis.com/drive/v3/files/1a6W8RFgIn8lsbRNLrdbUa0h_kvr23Kg3?alt=media") as! URL
-        block(url, true)
-    }
-    
-    func playerGetPreloadPlayURL(_ block: ((URL?, Bool) -> AVPlayerItem?)!) {
-        block(nil, true)
-    }
+class ViewController: UIViewController, GIDSignInDelegate {
     
 
     override func viewDidLoad() {
@@ -58,14 +25,14 @@ class ViewController: UIViewController, GIDSignInDelegate, DLCachePlayerDataDele
         GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance()?.scopes = [kGTLRAuthScopeDrive]
         GIDSignIn.sharedInstance()?.presentingViewController = self
-        GIDSignIn.sharedInstance()?.signIn()
-        
-        DLCachePlayer.sharedInstance()?.setDelegate(self)
+        GIDSignIn.sharedInstance()?.restorePreviousSignIn()
     }
-    
+
+    var player = AVPlayer()
     @IBAction func btnTest_Clicked(_ sender: Any) {
         
-        DLCachePlayer.sharedInstance()?.resetAndPlay()
+        //let asset = AVURLAsset(url: URL(string: "https://raw.githubusercontent.com/dohProject/DLCachePlayer/master/DLCachePlayerDemo/Sample/2.%20kare.m4a")!)
+        PlayerCore.shared.playWithPlayitems(playitems: nil, index: 0)
         
         
         //downloadFile()
