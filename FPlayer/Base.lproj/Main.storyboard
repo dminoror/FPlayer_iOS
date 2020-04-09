@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lR3-XP-5So">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lR3-XP-5So">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -140,6 +140,7 @@
                                     <constraint firstAttribute="width" secondItem="54j-7C-e1n" secondAttribute="height" multiplier="1:1" id="QfK-PV-zh1"/>
                                     <constraint firstAttribute="width" constant="48" id="cgm-QI-xBS"/>
                                 </constraints>
+                                <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="playIcon"/>
                                 <connections>
                                     <action selector="playButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="Qob-oN-Ym7"/>
@@ -151,6 +152,7 @@
                                     <constraint firstAttribute="width" constant="40" id="LTE-Sq-qZX"/>
                                     <constraint firstAttribute="width" secondItem="6zQ-gw-d3d" secondAttribute="height" multiplier="1:1" id="nIL-LF-exJ"/>
                                 </constraints>
+                                <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="closeIcon"/>
                                 <connections>
                                     <action selector="closeButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="Tqj-2t-oNY"/>
@@ -161,6 +163,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="4HG-Dj-5t1" secondAttribute="height" multiplier="1:1" id="crU-0C-cwu"/>
                                 </constraints>
+                                <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="loopIcon"/>
                                 <connections>
                                     <action selector="loopButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="yNe-vT-RPr"/>
@@ -171,6 +174,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="6Hg-r3-2Rk" secondAttribute="height" multiplier="1:1" id="yeW-C7-OnU"/>
                                 </constraints>
+                                <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="randomIcon"/>
                                 <connections>
                                     <action selector="randomButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="gV9-1z-5wP"/>
@@ -181,6 +185,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="8hc-Dy-uxn" secondAttribute="height" multiplier="1:1" id="FtK-jd-bJU"/>
                                 </constraints>
+                                <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="playlistIcon"/>
                                 <connections>
                                     <action selector="playlistButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="aEt-1R-PKH"/>
@@ -192,6 +197,7 @@
                                     <constraint firstAttribute="width" secondItem="dan-Vt-wNl" secondAttribute="height" multiplier="1:1" id="MEp-mg-qYS"/>
                                     <constraint firstAttribute="width" constant="40" id="fFr-h1-cPu"/>
                                 </constraints>
+                                <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="prevIcon"/>
                                 <connections>
                                     <action selector="prevButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="oNc-N2-27C"/>
@@ -203,18 +209,22 @@
                                     <constraint firstAttribute="width" secondItem="2eC-Qw-VBa" secondAttribute="height" multiplier="1:1" id="xzT-6V-QZg"/>
                                     <constraint firstAttribute="width" constant="40" id="zrW-Rw-1aD"/>
                                 </constraints>
+                                <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="nextIcon"/>
                                 <connections>
                                     <action selector="nextButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="2FG-OF-CSE"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="WeR-nX-2yc" customClass="DLProgressSlider">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WeR-nX-2yc" customClass="DLProgressSlider">
                                 <rect key="frame" x="18" y="720" width="378" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="tur-Ct-tqb"/>
                                 </constraints>
                                 <color key="minimumTrackTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="maximumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="progressSlider_Changed:" destination="2Wu-3j-CWX" eventType="valueChanged" id="bXa-qE-I70"/>
+                                </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3p-oV-ece">
                                 <rect key="frame" x="20" y="750" width="39" height="17"/>

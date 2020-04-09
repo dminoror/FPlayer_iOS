@@ -27,9 +27,10 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     }
     
     var playlist: [Playitem]?
-    var playIndex: Int?
+    var playIndex = 0
     
-    func getCurrentMetadata(type: playerMetadataType) -> Any? {
+    // MARK: Player Info
+    func metadata(type: playerMetadataType) -> Any? {
         if let metadata = currentMetadata?[type.rawValue] {
             if (type == .artwork) {
                 if let data = metadata.value as? Data {
@@ -44,13 +45,51 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         }
         return nil
     }
-    func getCurrentTime() -> TimeInterval? {
+    func currentTime() -> TimeInterval? {
         return DLCachePlayer.sharedInstance()?.currentTime()
     }
-    func getTotalTime() -> TimeInterval? {
+    func totalTime() -> TimeInterval? {
         return DLCachePlayer.sharedInstance().currentDuration()
     }
+    func playState() -> DLCachePlayerPlayState {
+        return DLCachePlayer.sharedInstance()?.playState ?? .stop
+    }
     
+    // MARK: DLCachePlayer Action
+    func switchState() {
+        if (DLCachePlayer.sharedInstance()?.playState == .pause) {
+            DLCachePlayer.sharedInstance()?.resume()
+        }
+        else if (DLCachePlayer.sharedInstance()?.playState == .stop) {
+            DLCachePlayer.sharedInstance()?.resetAndPlay()
+        }
+        else if (DLCachePlayer.sharedInstance()?.playState == .playing) {
+            DLCachePlayer.sharedInstance()?.pause()
+        }
+    }
+    func next() {
+        if let playlist = playlist {
+            playIndex += 1
+            if (playIndex >= playlist.count) {
+                playIndex = 0
+            }
+            DLCachePlayer.sharedInstance()?.resetAndPlay()
+        }
+    }
+    func prev() {
+        if let playlist = playlist {
+            playIndex -= 1
+            if (playIndex < 0) {
+                playIndex = playlist.count - 1
+            }
+            DLCachePlayer.sharedInstance()?.resetAndPlay()
+        }
+    }
+    func seek(time: TimeInterval) {
+        DLCachePlayer.sharedInstance()?.seek(toTimeInterval: time, completionHandler: nil)
+    }
+    
+    // MARK: DLCachePlayer Delegate
     func playWithPlayitems(playitems: [Playitem]?, index: Int) {
         playlist = playitems
         playIndex = index
@@ -58,11 +97,17 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     }
     
     func playerGetCurrentPlayURL(_ block: ((URL?, Bool) -> AVPlayerItem?)!) {
-        /*
-        block(URL(string: "https://raw.githubusercontent.com/dohProject/DLCachePlayer/master/DLCachePlayerDemo/Sample/2.%20kare.m4a"), true)
-        return*/
-        guard let index = playIndex else { return }
-        if let playitem = playlist?[optional: index] {
+        //https://www.googleapis.com/drive/v3/files/1KHyOzaHF2y43rhn0y_HHY2lMPiujk1Jt?alt=media  playable
+        //https://www.googleapis.com/drive/v3/files/1JzVt83KGCOY7kOA844O-PLcwC3FHOr_8?alt=media  no play
+        //https://www.googleapis.com/drive/v3/files/1hQ6O0dog7SoDax9poGG21bML56pYvWNv?alt=media  playable flac
+        //https://www.googleapis.com/drive/v3/files/1rvD5sojO4XPHLU3DJZC1A_2I_uBh14mj?alt=media  no play flac
+        
+        block(URL(string: "https://www.googleapis.com/drive/v3/files/1rvD5sojO4XPHLU3DJZC1A_2I_uBh14mj?alt=media"), true)
+        
+        //block(URL(string: "https://www.googleapis.com/drive/v3/files/1KHyOzaHF2y43rhn0y_HHY2lMPiujk1Jt?alt=media"), true)
+        //block(URL(string: "https://www.googleapis.com/drive/v3/files/1JzVt83KGCOY7kOA844O-PLcwC3FHOr_8?alt=media"), true)
+        return
+        if let playitem = playlist?[optional: playIndex] {
             if let url = URL.urlFromString(string: playitem.getPlayURL()) {
                 _ = block(url, true)
             }

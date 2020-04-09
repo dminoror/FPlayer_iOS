@@ -34,6 +34,7 @@ class PlayerPage: UIViewController {
         progressSlider.maximumTrackTintColor = UIColor(white: 0.75, alpha: 1)
         progressSlider.minimumTrackTintColor = .black
         progressSlider.setThumbImage(UIImage.makeCircleWith(size: CGSize(width: 12, height: 12), backgroundColor: .black), for: .normal)
+        playButton.setImage(UIImage(named: "pauseIcon"), for: .selected)
     }
     
     override func viewDidLoad() {
@@ -63,7 +64,8 @@ class PlayerPage: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(playerPlayerItemChanged), name: NSNotification.Name("playerPlayerItemChanged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(playerGotMetadata), name: NSNotification.Name("playerGotMetadata"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidPlayStateChanged), name: NSNotification.Name("playerDidPlayStateChanged"), object: nil)
-        setupPlayInfo()
+        updatePlayInfo()
+        updatePlayState()
         progressTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(progressTimer_Tick), userInfo: nil, repeats: true)
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -73,21 +75,30 @@ class PlayerPage: UIViewController {
         progressTimer = nil
     }
     
-    func setupPlayInfo() {
-        DispatchQueue.main.async {
-            self.coverImage.image = PlayerCore.shared.getCurrentMetadata(type: .artwork) as? UIImage
-            self.titleLabel.text = PlayerCore.shared.getCurrentMetadata(type: .title) as? String
-            self.artistLabel.text = PlayerCore.shared.getCurrentMetadata(type: .artist) as? String
-            if let totalTime = PlayerCore.shared.getTotalTime() {
-                self.progressSlider.maximumValue = Float(totalTime)
-                self.totalTimeLabel.text = totalTime.durationFormat()
-            }
+    func updatePlayInfo() {
+        coverImage.image = PlayerCore.shared.metadata(type: .artwork) as? UIImage
+        titleLabel.text = PlayerCore.shared.metadata(type: .title) as? String
+        artistLabel.text = PlayerCore.shared.metadata(type: .artist) as? String
+        if let totalTime = PlayerCore.shared.totalTime() {
+            progressSlider.maximumValue = Float(totalTime)
+            totalTimeLabel.text = totalTime.durationFormat()
         }
+    }
+    func resetPlayInfo() {
+        coverImage.image = nil
+        titleLabel.text = nil
+        artistLabel.text = nil
+        currentTimeLabel.text = "00:00"
+        totalTimeLabel.text = "00:00"
+    }
+    func updatePlayState() {
+        playButton.isSelected = (PlayerCore.shared.playState() == .playing)
+        playButton.isEnabled = (PlayerCore.shared.playState() == .pause || PlayerCore.shared.playState() == .playing)
     }
     
     @objc
     func progressTimer_Tick() {
-        if let currentTime = PlayerCore.shared.getCurrentTime() {
+        if let currentTime = PlayerCore.shared.currentTime() {
             progressSlider.value = Float(currentTime)
             currentTimeLabel.text = currentTime.durationFormat()
         }
@@ -95,13 +106,13 @@ class PlayerPage: UIViewController {
     
     // MARK: Buttons Clicked
     @IBAction func playButton_Clicked(_ sender: Any) {
-        
+        PlayerCore.shared.switchState()
     }
     @IBAction func prevButton_Clicked(_ sender: Any) {
-        
+        PlayerCore.shared.prev()
     }
     @IBAction func nextButton_Clicked(_ sender: Any) {
-        
+        PlayerCore.shared.next()
     }
     @IBAction func closeButton_Clicked(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
@@ -115,6 +126,9 @@ class PlayerPage: UIViewController {
     @IBAction func playlistButton_Clicked(_ sender: Any) {
         
     }
+    @IBAction func progressSlider_Changed(_ sender: Any) {
+        PlayerCore.shared.seek(time: TimeInterval(progressSlider.value))
+    }
     
     @objc
     func playerCacheProgress(notification: Notification) {
@@ -126,15 +140,21 @@ class PlayerPage: UIViewController {
     }
     @objc
     func playerPlayerItemChanged() {
-        
+        DispatchQueue.main.async {
+            self.resetPlayInfo()
+        }
     }
     @objc
     func playerGotMetadata() {
-        setupPlayInfo()
+        DispatchQueue.main.async {
+            self.updatePlayInfo()
+        }
     }
     @objc
     func playerDidPlayStateChanged() {
-        
+        DispatchQueue.main.async {
+            self.updatePlayState()
+        }
     }
     
 }

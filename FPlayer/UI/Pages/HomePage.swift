@@ -45,6 +45,14 @@ UITableViewDelegate, UITableViewDataSource {
             GIDSignIn.sharedInstance()?.delegate = self
             GIDSignIn.sharedInstance()?.restorePreviousSignIn()
         }
+        /*
+        let string = Bundle.main.path(forResource: "01. さよならメモリーズ", ofType: "flac")
+        let url = URL(fileURLWithPath: string!)
+        let asset = AVAsset(url: url)
+        let playerItem = AVPlayerItem(asset: asset)
+        player = AVPlayer(playerItem: playerItem)
+        player?.play()
+        print(playerItem.asset.commonMetadata)*/
     }
     
     override func viewWillAppear(_ animated: Bool) {

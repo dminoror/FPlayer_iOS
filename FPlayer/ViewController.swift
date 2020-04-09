@@ -17,17 +17,21 @@ class ViewController: UIViewController, GIDSignInDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-        /*
-        GIDSignIn.sharedInstance()?.presentingViewController = self
-        GIDSignIn.sharedInstance().signIn()*/
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance()?.scopes = [kGTLRAuthScopeDrive]
         GIDSignIn.sharedInstance()?.presentingViewController = self
-        GIDSignIn.sharedInstance()?.restorePreviousSignIn()
+        if ((GIDSignIn.sharedInstance()?.hasPreviousSignIn()) == true) {
+            GIDSignIn.sharedInstance()?.restorePreviousSignIn()
+        }
+        else {
+            GIDSignIn.sharedInstance()?.signIn()
+        }
     }
-
+    
     var player = AVPlayer()
     @IBAction func btnTest_Clicked(_ sender: Any) {
         

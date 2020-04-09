@@ -121,6 +121,13 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		82B78F7224349524005201EC /* Sample */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Sample;
+			sourceTree = "<group>";
+		};
 		82BF03A123FFCA2100F852D5 /* Player */ = {
 			isa = PBXGroup;
 			children = (
@@ -160,6 +167,7 @@
 		82CD360823FD111200E03EE4 /* FPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				82B78F7224349524005201EC /* Sample */,
 				82009FD32418F14500A1D0A5 /* UI */,
 				82AB6378240FAC390033039A /* Utilities */,
 				82BF03AE23FFD8C500F852D5 /* Objects */,
@@ -490,6 +498,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = GBEAX8CF24;
 				INFOPLIST_FILE = FPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -513,6 +522,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = GBEAX8CF24;
 				INFOPLIST_FILE = FPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
