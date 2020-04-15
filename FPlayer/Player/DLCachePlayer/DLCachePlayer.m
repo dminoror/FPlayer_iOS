@@ -60,6 +60,11 @@
         self.retryTimes = 3;
         self.retryDelay = 1;
         self.tempFilePath = [[NSHomeDirectory() stringByAppendingPathComponent:@"tmp"] stringByAppendingPathComponent:@"musicCahce"];
+        NSArray *tempFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.tempFilePath error:nil];
+        for (NSString *tempFile in tempFiles) {
+            NSError *error;
+            [[NSFileManager defaultManager] removeItemAtPath:[self.tempFilePath stringByAppendingPathComponent:tempFile] error:&error];
+        }
     }
     return self;
 }
@@ -387,9 +392,11 @@
         }
         else if (self.audioPlayer.currentItem.status == AVPlayerItemStatusReadyToPlay)
         {
-            [self playerReadyToPlay];
-            [self playerDidPlayStateChanged:DLCachePlayerPlayStateReady];
-            [self.audioPlayer play];
+            if (playState == DLCachePlayerPlayStateInit) {
+                [self playerReadyToPlay];
+                [self playerDidPlayStateChanged:DLCachePlayerPlayStateReady];
+                [self.audioPlayer play];
+            }
         }
     }
     /*

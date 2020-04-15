@@ -31,10 +31,11 @@ class PlayerPage: UIViewController {
     override func loadView() {
         super.loadView()
         progressSlider.cachedColor = UIColor(white: 0.5, alpha: 1)
-        progressSlider.maximumTrackTintColor = UIColor(white: 0.75, alpha: 1)
-        progressSlider.minimumTrackTintColor = .black
-        progressSlider.setThumbImage(UIImage.makeCircleWith(size: CGSize(width: 12, height: 12), backgroundColor: .black), for: .normal)
-        playButton.setImage(UIImage(named: "pauseIcon"), for: .selected)
+        progressSlider.maximumTrackTintColor = UIColor(named: "MaxTrack")
+        progressSlider.minimumTrackTintColor = UIColor(named: "Text")
+        progressSlider.setThumbImage(UIImage.makeCircleWith(size: CGSize(width: 12, height: 12), backgroundColor: UIColor(named: "Text")!), for: .normal)
+        playButton.setImage(state: "playing", image: UIImage(named: "pauseIcon"))
+        playButton.setImage(state: "pause", image: UIImage(named: "playIcon"))
     }
     
     override func viewDidLoad() {
@@ -79,6 +80,10 @@ class PlayerPage: UIViewController {
         coverImage.image = PlayerCore.shared.metadata(type: .artwork) as? UIImage
         titleLabel.text = PlayerCore.shared.metadata(type: .title) as? String
         artistLabel.text = PlayerCore.shared.metadata(type: .artist) as? String
+        if let currentTime = PlayerCore.shared.currentTime() {
+            progressSlider.value = Float(currentTime)
+            currentTimeLabel.text = currentTime.durationFormat()
+        }
         if let totalTime = PlayerCore.shared.totalTime() {
             progressSlider.maximumValue = Float(totalTime)
             totalTimeLabel.text = totalTime.durationFormat()
@@ -92,7 +97,7 @@ class PlayerPage: UIViewController {
         totalTimeLabel.text = "00:00"
     }
     func updatePlayState() {
-        playButton.isSelected = (PlayerCore.shared.playState() == .playing)
+        playButton.setState(state: (PlayerCore.shared.playState() == .playing) ? "playing" : "pause")
         playButton.isEnabled = (PlayerCore.shared.playState() == .pause || PlayerCore.shared.playState() == .playing)
     }
     

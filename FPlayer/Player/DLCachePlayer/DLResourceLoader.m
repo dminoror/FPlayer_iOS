@@ -11,7 +11,7 @@
 #import "DLCachePlayer.h"
 #import <GoogleSignIn/GoogleSignIn.h>
 
-#define LOG_LOCK YES
+#define LOG_LOCK NO
 
 @implementation DLResourceLoader
 {
@@ -43,17 +43,6 @@
         finished = NO;
         canceled = NO;
         gotMetadata = NO;
-        if (LOG_LOCK) NSLog(@"temp path = %@", [DLCachePlayer sharedInstance].tempFilePath);
-        /*
-        DLRequestTask * task = [DLRequestTask new];
-        task.tempFileURL = [NSURL URLWithString:[[DLCachePlayer sharedInstance].tempFilePath stringByAppendingPathComponent:[NSString stringWithFormat:@"successfile"]]];
-        task.requestOffset = 0;
-        NSError *error;
-        NSDictionary *attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:task.tempFileURL.absoluteString error:&error];
-        unsigned long long fileSize = [attributes fileSize];
-        task.cacheLength = fileSize;
-        task.requestEnd = fileSize;
-        [tasks addObject:task];*/
     }
     return self;
 }
@@ -80,6 +69,7 @@
 #pragma mark - AVAssetResourceLoaderDelegate
 - (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest
 {
+    NSLog(@"shouldWaitForLoadingOfRequestedResource, offset = %llu, length = %ld", loadingRequest.dataRequest.requestedOffset, (long)loadingRequest.dataRequest.requestedLength);
     if (LOG_LOCK) NSLog(@"lock shouldWaitForLoadingOfRequestedResource");
     [lock lock];
     {
@@ -306,6 +296,14 @@
 {
     // read file information
     NSString * mimeType = [task.response MIMEType];
+    if ([mimeType containsString:@"audio"]) {
+        if ([mimeType containsString:@"m4a"]) {
+            mimeType = @"audio/x-m4a";
+        }
+        else if ([mimeType containsString:@"flac"]) {
+            mimeType = @"audio/flac";
+        }
+    }
     //mimeType = @"audio/x-m4a";
     CFStringRef contentType = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, (__bridge CFStringRef)(mimeType), NULL);
     loadingRequest.contentInformationRequest.contentType = CFBridgingRelease(contentType);

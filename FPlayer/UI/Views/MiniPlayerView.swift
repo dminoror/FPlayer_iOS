@@ -37,12 +37,13 @@ class MiniPlayerView: UIView {
         super.awakeFromNib()
         playButton.layoutIfNeeded()
         playButton.clipsToBounds = false
-        playButton.setImage(UIImage(named: "pauseIcon"), for: .selected)
+        playButton.setImage(state: "playing", image: UIImage(named: "pauseIcon"))
+        playButton.setImage(state: "pause", image: UIImage(named: "playIcon"))
         
         let backBorder = CAShapeLayer()
         backBorder.lineWidth = 2
         backBorder.fillColor = UIColor.clear.cgColor
-        backBorder.strokeColor = UIColor.gray.cgColor
+        backBorder.strokeColor = UIColor(named: "MaxTrack")?.cgColor
         backBorder.frame = playButton.bounds
         let aDegree = CGFloat.pi / 180
         let path = UIBezierPath()
@@ -52,7 +53,7 @@ class MiniPlayerView: UIView {
         
         playButtonBorder.lineWidth = 3
         playButtonBorder.fillColor = UIColor.clear.cgColor
-        playButtonBorder.strokeColor = UIColor.black.cgColor
+        playButtonBorder.strokeColor = UIColor(named: "Text")?.cgColor
         playButtonBorder.frame = playButton.bounds
         playButton.layer.addSublayer(playButtonBorder)
     }
@@ -83,7 +84,7 @@ class MiniPlayerView: UIView {
         titleLabel.text = nil
     }
     func updatePlayState() {
-        playButton.isSelected = (PlayerCore.shared.playState() == .playing)
+        playButton.setState(state: (PlayerCore.shared.playState() == .playing) ? "playing" : "pause")
         playButton.isEnabled = (PlayerCore.shared.playState() == .pause || PlayerCore.shared.playState() == .playing)
     }
     

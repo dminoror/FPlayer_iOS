@@ -24,6 +24,12 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     override init() {
         super.init()
         DLCachePlayer.sharedInstance()?.setDelegate(self)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.ambient)
+            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            print(error)
+        }
     }
     
     var playlist: [Playitem]?
@@ -102,11 +108,11 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         //https://www.googleapis.com/drive/v3/files/1hQ6O0dog7SoDax9poGG21bML56pYvWNv?alt=media  playable flac
         //https://www.googleapis.com/drive/v3/files/1rvD5sojO4XPHLU3DJZC1A_2I_uBh14mj?alt=media  no play flac
         
-        block(URL(string: "https://www.googleapis.com/drive/v3/files/1rvD5sojO4XPHLU3DJZC1A_2I_uBh14mj?alt=media"), true)
+        //block(URL(string: "https://www.googleapis.com/drive/v3/files/1rvD5sojO4XPHLU3DJZC1A_2I_uBh14mj?alt=media"), true)
         
         //block(URL(string: "https://www.googleapis.com/drive/v3/files/1KHyOzaHF2y43rhn0y_HHY2lMPiujk1Jt?alt=media"), true)
         //block(URL(string: "https://www.googleapis.com/drive/v3/files/1JzVt83KGCOY7kOA844O-PLcwC3FHOr_8?alt=media"), true)
-        return
+        //return
         if let playitem = playlist?[optional: playIndex] {
             if let url = URL.urlFromString(string: playitem.getPlayURL()) {
                 _ = block(url, true)

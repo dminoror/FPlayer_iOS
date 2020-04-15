@@ -8,7 +8,7 @@
 
 import UIKit
 
-public final class ObjectAssociation<T: AnyObject> {
+public final class ObjectAssociation<T: Any> {
 
     private let policy: objc_AssociationPolicy
 
@@ -20,7 +20,7 @@ public final class ObjectAssociation<T: AnyObject> {
 
     /// Accesses associated object.
     /// - Parameter index: An object whose associated object is to be accessed.
-    public subscript(index: AnyObject) -> T? {
+    public subscript(index: Any) -> T? {
 
         get { return objc_getAssociatedObject(index, Unmanaged.passUnretained(self).toOpaque()) as! T? }
         set { objc_setAssociatedObject(index, Unmanaged.passUnretained(self).toOpaque(), newValue, policy) }
@@ -63,12 +63,38 @@ extension UIView {
 }
 
 extension UIButton {
+    
     @IBInspectable var imageContentMode: ContentMode {
         get {
             return self.imageView?.contentMode ?? .scaleToFill
         }
         set {
             self.imageView?.contentMode = newValue
+        }
+    }
+    
+    private static var storedStateImages = ObjectAssociation<Dictionary<String, UIImage>>()
+    private var stateImage: Dictionary<String, UIImage> {
+        get {
+            if let dict = UIButton.storedStateImages[self] {
+                return dict
+            }
+            let dict = Dictionary<String, UIImage>()
+            UIButton.storedStateImages[self] = dict
+            return dict
+        }
+        set {
+            UIButton.storedStateImages[self] = newValue
+        }
+    }
+    func setState(state: String) {
+        setImage(stateImage[state], for: .normal)
+    }
+    func setImage(state: String, image: UIImage?) {
+        if let image = image {
+            var imageDict = stateImage
+            imageDict[state] = image
+            stateImage = imageDict
         }
     }
 }

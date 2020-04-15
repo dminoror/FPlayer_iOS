@@ -26,6 +26,7 @@
 		82CD361323FD111400E03EE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82CD361223FD111400E03EE4 /* Assets.xcassets */; };
 		82CD361623FD111400E03EE4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 82CD361423FD111400E03EE4 /* LaunchScreen.storyboard */; };
 		82CD361E23FD179300E03EE4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 82CD361D23FD179300E03EE4 /* GoogleService-Info.plist */; };
+		82D2332224446D1800EAF9BB /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 82D2332124446D1800EAF9BB /* Colors.xcassets */; };
 		82F943492417A3CF00CA88FC /* MiniPlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82F943482417A3CF00CA88FC /* MiniPlayerView.xib */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		82CD361523FD111400E03EE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		82CD361723FD111400E03EE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82CD361D23FD179300E03EE4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		82D2332124446D1800EAF9BB /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		82F943482417A3CF00CA88FC /* MiniPlayerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MiniPlayerView.xib; sourceTree = "<group>"; };
 		C193E869191142FD110CF608 /* Pods_FPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6922C82479294881D36C8F4 /* Pods-FPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FPlayer.debug.xcconfig"; path = "Target Support Files/Pods-FPlayer/Pods-FPlayer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				82BF03A223FFCA3800F852D5 /* Bridging-Header.h */,
 				82CD360F23FD111200E03EE4 /* Main.storyboard */,
 				82CD361223FD111400E03EE4 /* Assets.xcassets */,
+				82D2332124446D1800EAF9BB /* Colors.xcassets */,
 				82CD361423FD111400E03EE4 /* LaunchScreen.storyboard */,
 				82CD361723FD111400E03EE4 /* Info.plist */,
 				82CD361D23FD179300E03EE4 /* GoogleService-Info.plist */,
@@ -267,6 +270,7 @@
 				82F943492417A3CF00CA88FC /* MiniPlayerView.xib in Resources */,
 				82CD361623FD111400E03EE4 /* LaunchScreen.storyboard in Resources */,
 				82CD361E23FD179300E03EE4 /* GoogleService-Info.plist in Resources */,
+				82D2332224446D1800EAF9BB /* Colors.xcassets in Resources */,
 				82CD361323FD111400E03EE4 /* Assets.xcassets in Resources */,
 				82CD361123FD111200E03EE4 /* Main.storyboard in Resources */,
 			);

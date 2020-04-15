@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -85,6 +86,7 @@
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hIF-Rk-hsf">
                                 <rect key="frame" x="0.0" y="88" width="414" height="674"/>
+                                <color key="backgroundColor" name="Background"/>
                                 <connections>
                                     <outlet property="dataSource" destination="lR3-XP-5So" id="5uv-sq-VYQ"/>
                                     <outlet property="delegate" destination="lR3-XP-5So" id="imS-zt-fMH"/>
@@ -126,7 +128,7 @@
         <!--Player Page-->
         <scene sceneID="rpX-fv-MZj">
             <objects>
-                <viewController storyboardIdentifier="FullPlayerPage" id="2Wu-3j-CWX" customClass="PlayerPage" customModule="FPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FullPlayerPage" modalPresentationStyle="fullScreen" id="2Wu-3j-CWX" customClass="PlayerPage" customModule="FPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lMG-jZ-05k">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -134,81 +136,89 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a4O-9O-Ogd">
                                 <rect key="frame" x="0.0" y="44" width="414" height="568"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54j-7C-e1n" userLabel="playButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54j-7C-e1n" userLabel="playButton">
                                 <rect key="frame" x="183" y="766" width="48" height="48"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="54j-7C-e1n" secondAttribute="height" multiplier="1:1" id="QfK-PV-zh1"/>
                                     <constraint firstAttribute="width" constant="48" id="cgm-QI-xBS"/>
                                 </constraints>
+                                <color key="tintColor" name="Text"/>
                                 <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
-                                <state key="normal" title="Button" image="playIcon"/>
+                                <state key="normal" image="playIcon"/>
                                 <connections>
                                     <action selector="playButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="Qob-oN-Ym7"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6zQ-gw-d3d" userLabel="playButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6zQ-gw-d3d" userLabel="playButton">
                                 <rect key="frame" x="20" y="822" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="LTE-Sq-qZX"/>
                                     <constraint firstAttribute="width" secondItem="6zQ-gw-d3d" secondAttribute="height" multiplier="1:1" id="nIL-LF-exJ"/>
                                 </constraints>
+                                <color key="tintColor" name="Text"/>
                                 <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="closeIcon"/>
                                 <connections>
                                     <action selector="closeButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="Tqj-2t-oNY"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4HG-Dj-5t1" userLabel="playButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4HG-Dj-5t1" userLabel="playButton">
                                 <rect key="frame" x="104" y="822" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="4HG-Dj-5t1" secondAttribute="height" multiplier="1:1" id="crU-0C-cwu"/>
                                 </constraints>
+                                <color key="tintColor" name="Text"/>
                                 <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="loopIcon"/>
                                 <connections>
                                     <action selector="loopButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="yNe-vT-RPr"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Hg-r3-2Rk" userLabel="playButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Hg-r3-2Rk" userLabel="playButton">
                                 <rect key="frame" x="270" y="822" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="6Hg-r3-2Rk" secondAttribute="height" multiplier="1:1" id="yeW-C7-OnU"/>
                                 </constraints>
+                                <color key="tintColor" name="Text"/>
                                 <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="randomIcon"/>
                                 <connections>
                                     <action selector="randomButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="gV9-1z-5wP"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hc-Dy-uxn" userLabel="playButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hc-Dy-uxn" userLabel="playButton">
                                 <rect key="frame" x="354" y="822" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="8hc-Dy-uxn" secondAttribute="height" multiplier="1:1" id="FtK-jd-bJU"/>
                                 </constraints>
+                                <color key="tintColor" name="Text"/>
                                 <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="playlistIcon"/>
                                 <connections>
                                     <action selector="playlistButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="aEt-1R-PKH"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dan-Vt-wNl" userLabel="playButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dan-Vt-wNl" userLabel="playButton">
                                 <rect key="frame" x="112" y="770" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="dan-Vt-wNl" secondAttribute="height" multiplier="1:1" id="MEp-mg-qYS"/>
                                     <constraint firstAttribute="width" constant="40" id="fFr-h1-cPu"/>
                                 </constraints>
+                                <color key="tintColor" name="Text"/>
                                 <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="prevIcon"/>
                                 <connections>
                                     <action selector="prevButton_Clicked:" destination="2Wu-3j-CWX" eventType="touchUpInside" id="oNc-N2-27C"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2eC-Qw-VBa" userLabel="playButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2eC-Qw-VBa" userLabel="playButton">
                                 <rect key="frame" x="262" y="770" width="40" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="2eC-Qw-VBa" secondAttribute="height" multiplier="1:1" id="xzT-6V-QZg"/>
                                     <constraint firstAttribute="width" constant="40" id="zrW-Rw-1aD"/>
                                 </constraints>
+                                <color key="tintColor" name="Text"/>
                                 <inset key="contentEdgeInsets" minX="4" minY="4" maxX="4" maxY="4"/>
                                 <state key="normal" title="Button" image="nextIcon"/>
                                 <connections>
@@ -220,8 +230,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="tur-Ct-tqb"/>
                                 </constraints>
-                                <color key="minimumTrackTintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="maximumTrackTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="minimumTrackTintColor" name="Text"/>
+                                <color key="maximumTrackTintColor" systemColor="systemGray2Color" red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="progressSlider_Changed:" destination="2Wu-3j-CWX" eventType="valueChanged" id="bXa-qE-I70"/>
                                 </connections>
@@ -229,13 +239,13 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3p-oV-ece">
                                 <rect key="frame" x="20" y="750" width="39" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="Text"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Bv-4B-wrD">
                                 <rect key="frame" x="355" y="750" width="39" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="Text"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist 123" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cfy-B5-03L">
@@ -244,7 +254,7 @@
                                     <constraint firstAttribute="height" constant="40" id="nLb-pP-Hhr"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="Text"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Music Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jyd-eJ-dkf">
@@ -253,11 +263,11 @@
                                     <constraint firstAttribute="height" constant="48" id="ggc-8F-2bE"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="Text"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" name="Background"/>
                         <constraints>
                             <constraint firstItem="4HG-Dj-5t1" firstAttribute="width" secondItem="4HG-Dj-5t1" secondAttribute="height" multiplier="1:1" id="1jf-Ke-qYg"/>
                             <constraint firstItem="Jyd-eJ-dkf" firstAttribute="top" secondItem="a4O-9O-Ogd" secondAttribute="bottom" constant="8" id="2eX-a6-Yz1"/>
@@ -336,5 +346,11 @@
         <image name="playlistIcon" width="256" height="256"/>
         <image name="prevIcon" width="256" height="256"/>
         <image name="randomIcon" width="128" height="128"/>
+        <namedColor name="Background">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Text">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>
