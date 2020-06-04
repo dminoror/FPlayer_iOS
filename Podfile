@@ -6,8 +6,9 @@ target 'FPlayer' do
   use_frameworks!
 
   # Pods for FPlayer
-  pod 'GoogleSignIn'
-  pod 'Firebase/Auth'
-  pod 'GoogleAPIClientForREST/Drive'
+  pod 'GoogleSignIn', '~> 5.0.2'
+  pod 'Firebase/Auth', '~> 6.22.0'
+  pod 'GoogleAPIClientForREST/Drive', '~> 1.4.1'
+  # pod 'ID3TagEditor', '~> 3.0'
 
 end

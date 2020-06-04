@@ -132,7 +132,10 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         if (isCurrent) {
             NotificationCenter.default.post(name: NSNotification.Name("playerCacheProgress"), object: ["tasks" : tasks!, "totalBytes": totalBytes])
         }
-    }
+    }/*
+    func playerDidFinishCache(_ playerItem: AVPlayerItem!, isCurrent: Bool, data: Data!) {
+        
+    }*/
     
     func playerPlayerItemChanged(_ playerItem: AVPlayerItem!) {
         currentMetadata = nil
