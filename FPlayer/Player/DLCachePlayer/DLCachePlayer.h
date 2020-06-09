@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, DLCachePlayerPlayState) {
 - (void)playerCacheProgress:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent tasks:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes;
 - (void)playerDidFinishCache:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent data:(NSData *)data;
 - (void)playerDidFail:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent error:(NSError *)error;
-- (void)playerGotMetadata:(NSArray<AVMetadataItem *>*)metadatas;
+- (void)playerGotMetadata:(NSDictionary *)metadatas;
 
 @end
 

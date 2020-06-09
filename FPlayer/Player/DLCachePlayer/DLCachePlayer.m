@@ -328,7 +328,7 @@
     }
     downloadState = DLCachePlayerDownloadStateIdle;
 }
-- (void)loader:(DLResourceLoader *)loader gotMetadata:(NSArray<AVMetadataItem *> *)metadata {
+- (void)loader:(DLResourceLoader *)loader gotMetadata:(NSDictionary *)metadata {
     [self playerGotMetadata:metadata];
 }
 - (void)loader:(DLResourceLoader *)loader loadingProgress:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes
@@ -465,7 +465,7 @@
         [self.delegate playerCacheProgress:playerItem isCurrent:isCurrent tasks:tasks totalBytes:totalBytes];
     }
 }
-- (void)playerGotMetadata:(NSArray<AVMetadataItem*>*)metadatas {
+- (void)playerGotMetadata:(NSDictionary *)metadatas {
     if ([self.delegate respondsToSelector:@selector(playerGotMetadata:)]) {
         [self.delegate playerGotMetadata:metadatas];
     }

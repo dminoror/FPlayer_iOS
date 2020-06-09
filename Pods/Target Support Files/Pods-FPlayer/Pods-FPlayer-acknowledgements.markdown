@@ -2934,6 +2934,14 @@ Fuller's blog</a>
    limitations under the License.
 
 
+## TagLibIOS
+
+TagLibIOS is distributed under the [GNU Lesser General Public License](http://www.gnu.org/licenses/lgpl.html)
+(LGPL) and [Mozilla Public License](http://www.mozilla.org/MPL/MPL-1.1.html) (MPL). Essentially that means that
+it may be used in proprietary applications, but if changes are made to
+TagLibIOS they must be contributed back to the project. Please review the
+licenses if you are considering using TagLibIOS in your project.
+
 ## nanopb
 
 Copyright (c) 2011 Petteri Aimonen <jpa at nanopb.mail.kapsi.fi>

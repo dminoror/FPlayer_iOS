@@ -19,7 +19,7 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     
     static let shared = PlayerCore()
     
-    var currentMetadata: [String : AVMetadataItem]?
+    var currentMetadata: [String : Any]?
     
     override init() {
         super.init()
@@ -36,21 +36,7 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     var playIndex = 0
     
     // MARK: Player Info
-    func metadata(type: playerMetadataType) -> Any? {
-        if let metadata = currentMetadata?[type.rawValue] {
-            if (type == .artwork) {
-                if let data = metadata.value as? Data {
-                    return UIImage(data: data)
-                }
-            }
-            else {
-                if let string = metadata.value as? String {
-                    return string
-                }
-            }
-        }
-        return nil
-    }
+    
     func currentTime() -> TimeInterval? {
         return DLCachePlayer.sharedInstance()?.currentTime()
     }
@@ -59,6 +45,30 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     }
     func playState() -> DLCachePlayerPlayState {
         return DLCachePlayer.sharedInstance()?.playState ?? .stop
+    }
+    var currentTitle: String? {
+        get {
+            if let value = currentMetadata?["title"] as? String {
+                return value
+            }
+            return nil
+        }
+    }
+    var currentArtist: String? {
+        get {
+            if let value = currentMetadata?["artist"] as? String {
+                return value
+            }
+            return nil
+        }
+    }
+    var currentArtwork: UIImage? {
+        get {
+            if let value = currentMetadata?["artwork"] as? UIImage {
+                return value
+            }
+            return nil
+        }
     }
     
     // MARK: DLCachePlayer Action
@@ -141,10 +151,17 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         currentMetadata = nil
         NotificationCenter.default.post(name: NSNotification.Name("playerPlayerItemChanged"), object: nil)
     }
-    func playerGotMetadata(_ metadatas: [AVMetadataItem]!) {
-        currentMetadata = metadatas.reduce(into: [String : AVMetadataItem]()) { (dict, metadata) in
-            if let key = metadata.commonKey?.rawValue {
-                dict.updateValue(metadata, forKey: key)
+    func playerGotMetadata(_ metadatas: [AnyHashable : Any]!) {
+        currentMetadata = metadatas.reduce(into: [String : Any]()) { (dict, metadata) in
+            if let key = metadata.key as? String {
+                if let value = metadata.value as? Data,
+                    key.contains("artwork"),
+                    let image = UIImage(data: value) {
+                    dict.updateValue(image, forKey: "artwork")
+                }
+                else {
+                    dict.updateValue(metadata.value, forKey: key)
+                }
             }
         }
         NotificationCenter.default.post(name: NSNotification.Name("playerGotMetadata"), object: nil)

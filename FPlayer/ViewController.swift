@@ -11,6 +11,7 @@ import Firebase
 import GoogleSignIn
 import GoogleAPIClientForREST
 import GTMSessionFetcher
+import TagLibIOS
 
 class ViewController: UIViewController, GIDSignInDelegate {
     
@@ -30,58 +31,19 @@ class ViewController: UIViewController, GIDSignInDelegate {
         else {
             GIDSignIn.sharedInstance()?.signIn()
         }
+        
+        btnTest_Clicked(0)
     }
     
     var player = AVPlayer()
     @IBAction func btnTest_Clicked(_ sender: Any) {
-        /*
-        var fileID: AudioFileID? = nil
-        let path = String(format: "%@/tmp/sayonara.flac", NSHomeDirectory() as CVarArg)
-        //let path = String(format: "%@/tmp/metadata", NSHomeDirectory() as CVarArg)
-        let url = URL(fileURLWithPath: path)
-        
-        var status:OSStatus = AudioFileOpenURL(url as CFURL, .readPermission, kAudioFileFLACType, &fileID)
-        
-        guard status == noErr else {
-            return
-        }
-
-        var dict: CFDictionary? = nil
-        var dataSize = UInt32(MemoryLayout<CFDictionary?>.size(ofValue: dict))
-
-        guard let audioFile = fileID else {
-            return
-        }
-
-        status = AudioFileGetProperty(audioFile, kAudioFilePropertyInfoDictionary, &dataSize, &dict)
-
-        guard status == noErr else {
-            return
-        }
-
-        AudioFileClose(audioFile)
-
-        guard let cfDict = dict else {
-            return
-        }
-
-        let tagsDict = NSDictionary.init(dictionary: cfDict)
-        print(tagsDict)
- */
-        
-        let path = String(format: "%@/tmp/sayonara.m4a", NSHomeDirectory() as CVarArg)
-        //let path = String(format: "%@/tmp/metadata", NSHomeDirectory() as CVarArg)
-        let file = FileHandle(forReadingAtPath: path)
-        //file?.seek(toFileOffset: 10000)
-        let data = file?.readData(ofLength: 1000)
-        let string = String(data: data!, encoding: .unicode)
-        print(string)
-        
-        
         
         //let asset = AVURLAsset(url: URL(string: "https://raw.githubusercontent.com/dohProject/DLCachePlayer/master/DLCachePlayerDemo/Sample/2.%20kare.m4a")!)
         //PlayerCore.shared.playWithPlayitems(playitems: nil, index: 0)
         
+        let path = String(format: "%@/tmp/0.flac", NSHomeDirectory())
+        let tla = TLAudio(fileAtPath: path)
+        print(tla?.title)
         
         //downloadFile()
           

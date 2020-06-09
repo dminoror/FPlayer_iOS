@@ -70,11 +70,13 @@ PODS:
   - nanopb/decode (1.30905.0)
   - nanopb/encode (1.30905.0)
   - PromisesObjC (1.2.8)
+  - TagLibIOS (0.3.0)
 
 DEPENDENCIES:
   - Firebase/Auth (~> 6.22.0)
   - GoogleAPIClientForREST/Drive (~> 1.4.1)
   - GoogleSignIn (~> 5.0.2)
+  - TagLibIOS
 
 SPEC REPOS:
   trunk:
@@ -94,6 +96,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - nanopb
     - PromisesObjC
+    - TagLibIOS
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
@@ -112,7 +115,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
+  TagLibIOS: fc5a7f3218639f5a97a6f2b02129d250d7c7513e
 
-PODFILE CHECKSUM: 4d4dbb04702d3f71c6d95a420a8750262a40b48a
+PODFILE CHECKSUM: 897a042441bd6e1435a8bdf4b9a8137abadfdc68
 
 COCOAPODS: 1.9.1

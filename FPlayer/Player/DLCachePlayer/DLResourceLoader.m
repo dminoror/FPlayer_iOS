@@ -10,6 +10,8 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "DLCachePlayer.h"
 #import <GoogleSignIn/GoogleSignIn.h>
+#import "TLAudio.h"
+#import "TLFlac.h"
 
 #define LOG_LOCK NO
 
@@ -418,7 +420,11 @@
     {
         if (!gotMetadata && self.playerItem.asset.commonMetadata.count > 0) {
             if ([self.delegate respondsToSelector:@selector(loader:gotMetadata:)]) {
-                [self.delegate loader:self gotMetadata:self.playerItem.asset.commonMetadata];
+                NSMutableDictionary *dict = [NSMutableDictionary new];
+                for (AVMetadataItem *metadata in self.playerItem.asset.commonMetadata) {
+                    [dict setObject:metadata.value forKey:metadata.commonKey];
+                }
+                [self.delegate loader:self gotMetadata:dict];
             }
             gotMetadata = YES;
         }
@@ -429,9 +435,47 @@
         {
             [session invalidateAndCancel];
             session = nil;
+            [self loadMetadata];
             [self requestTaskDidFinishLoadingWithCache:YES data:data url:task.response.URL];
         }
+        else {
+            [self loadMetadata];
+        }
         [lock unlock];
+    }
+}
+
+- (void)loadMetadata {
+    DLRequestTask *task = [tasks firstObject];
+    if ([task.task.response.MIMEType containsString:@"flac"]) {
+        NSString *oriPath = task.tempFileURL.path;
+        NSString *newPath = [NSString stringWithFormat:@"%@.flac", oriPath];
+        NSError *error;
+        [[NSFileManager defaultManager] moveItemAtPath:oriPath toPath:newPath error:&error];
+        if (!error) {
+            if ([self.delegate respondsToSelector:@selector(loader:gotMetadata:)]) {
+                TLAudio *tla = [[TLAudio alloc] initWithFileAtPath:newPath];
+                NSMutableDictionary *dict = [NSMutableDictionary new];
+                if (tla.title.length > 0) {
+                    [dict setObject:tla.title forKey:@"title"];
+                }
+                if (tla.artist.length > 0) {
+                    [dict setObject:tla.artist forKey:@"artist"];
+                }
+                if (tla.album.length > 0) {
+                    [dict setObject:tla.album forKey:@"albumName"];
+                }
+                if (tla.frontCoverPicture.length > 0) {
+                    [dict setObject:tla.frontCoverPicture forKey:@"artwork"];
+                }
+                else if (tla.artistPicture.length > 0) {
+                    [dict setObject:tla.artistPicture forKey:@"artwork"];
+                }
+                [self.delegate loader:self gotMetadata:dict];
+            }
+            gotMetadata = YES;
+            [[NSFileManager defaultManager] moveItemAtPath:newPath toPath:oriPath error:&error];
+        }
     }
 }
 

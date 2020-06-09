@@ -76,8 +76,8 @@ class MiniPlayerView: UIView {
     }
     
     func updatePlayInfo() {
-        coverImage.image = PlayerCore.shared.metadata(type: .artwork) as? UIImage
-        titleLabel.text = PlayerCore.shared.metadata(type: .title) as? String
+        coverImage.image = PlayerCore.shared.currentArtwork
+        titleLabel.text = PlayerCore.shared.currentTitle
     }
     func resetPlayInfo() {
         coverImage.image = nil

@@ -77,9 +77,9 @@ class PlayerPage: UIViewController {
     }
     
     func updatePlayInfo() {
-        coverImage.image = PlayerCore.shared.metadata(type: .artwork) as? UIImage
-        titleLabel.text = PlayerCore.shared.metadata(type: .title) as? String
-        artistLabel.text = PlayerCore.shared.metadata(type: .artist) as? String
+        coverImage.image = PlayerCore.shared.currentArtwork
+        titleLabel.text = PlayerCore.shared.currentTitle
+        artistLabel.text = PlayerCore.shared.currentArtist
         if let currentTime = PlayerCore.shared.currentTime() {
             progressSlider.value = Float(currentTime)
             currentTimeLabel.text = currentTime.durationFormat()

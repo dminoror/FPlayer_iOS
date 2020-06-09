@@ -14,7 +14,7 @@
 @optional
 - (void)loader:(DLResourceLoader *)loader loadingSuccess:(NSData *)data url:(NSURL *)url;
 - (void)loader:(DLResourceLoader *)loader loadingFailWithError:(NSError *)error url:(NSURL *)url;
-- (void)loader:(DLResourceLoader *)loader gotMetadata:(NSArray<AVMetadataItem *>*)metadatas;
+- (void)loader:(DLResourceLoader *)loader gotMetadata:(NSDictionary *)metadatas;
 - (void)loader:(DLResourceLoader *)loader loadingProgress:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes;
 @end
 

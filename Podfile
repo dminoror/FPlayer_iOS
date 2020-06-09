@@ -10,5 +10,6 @@ target 'FPlayer' do
   pod 'Firebase/Auth', '~> 6.22.0'
   pod 'GoogleAPIClientForREST/Drive', '~> 1.4.1'
   # pod 'ID3TagEditor', '~> 3.0'
+  pod 'TagLibIOS'
 
 end
