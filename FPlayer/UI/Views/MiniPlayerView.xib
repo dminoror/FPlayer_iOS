@@ -10,9 +10,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MiniPlayerView" customModule="FPlayer" customModuleProvider="target">
             <connections>
-                <outlet property="coverImage" destination="yZz-7l-zaM" id="urp-fT-LCC"/>
-                <outlet property="playButton" destination="G63-Uk-dDy" id="QjW-5o-p5J"/>
-                <outlet property="titleLabel" destination="U3A-LZ-e0l" id="bfT-LI-GKy"/>
+                <outlet property="coverImage" destination="yZz-7l-zaM" id="Dwa-BW-HCt"/>
+                <outlet property="playButton" destination="G63-Uk-dDy" id="R3r-As-IbU"/>
+                <outlet property="titleLabel" destination="U3A-LZ-e0l" id="JcU-vf-5YS"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -37,7 +37,7 @@
                     <inset key="contentEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
                     <state key="normal" image="playIcon"/>
                     <connections>
-                        <action selector="playButton_Clicked:" destination="-1" eventType="touchUpInside" id="lHy-WJ-sfI"/>
+                        <action selector="playButton_Clicked:" destination="-1" eventType="touchUpInside" id="3rj-qG-goj"/>
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U3A-LZ-e0l">

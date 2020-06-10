@@ -32,6 +32,22 @@ class MiniPlayerView: UIView {
         xibView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
         xibView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        let bundle = Bundle(for: type(of: self))
+        let nib = UINib(nibName: "MiniPlayerView", bundle: bundle)
+        ///透過nib來取得xibView
+        let xibView = nib.instantiate(withOwner: self, options: nil)[0] as! UIView
+        addSubview(xibView)
+        ///設置xibView的Constraint
+        xibView.translatesAutoresizingMaskIntoConstraints = false
+        xibView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        xibView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        xibView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        xibView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        self.awakeFromNib()
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -103,7 +119,9 @@ class MiniPlayerView: UIView {
     
     
     @IBAction func miniPlayer_Clicked(_ sender: Any) {
-        NotificationCenter.default.post(name: NSNotification.Name("didMiniPlayerClicked"), object: nil)
+        //NotificationCenter.default.post(name: NSNotification.Name("didMiniPlayerClicked"), object: nil)
+        let page = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FullPlayerPage")
+        UIApplication.shared.windows.first?.rootViewController?.present(page, animated: true, completion: nil)
     }
     
     @IBAction func playButton_Clicked(_ sender: Any) {

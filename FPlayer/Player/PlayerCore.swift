@@ -25,7 +25,7 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         super.init()
         DLCachePlayer.sharedInstance()?.setDelegate(self)
         do {
-            try AVAudioSession.sharedInstance().setCategory(.ambient)
+            try AVAudioSession.sharedInstance().setCategory(.playback)
             try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
         } catch {
             print(error)

@@ -15,12 +15,24 @@ extension Collection
         return self.indices.contains(i) ? self[i] : nil
     }
 }
+extension Array {
+    func jsonData() -> Data? {
+        let data = try? JSONSerialization.data(withJSONObject: self, options: [])
+        return data
+    }
+}
 extension Array where Element: Equatable
 {
     mutating func remove(object: Element)
     {
         guard let index = firstIndex(of: object) else {return}
         remove(at: index)
+    }
+}
+extension Dictionary {
+    func jsonData() -> Data? {
+        let data = try? JSONSerialization.data(withJSONObject: self, options: [])
+        return data
     }
 }
 extension URL

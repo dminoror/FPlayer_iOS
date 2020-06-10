@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="lR3-XP-5So">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="3Gn-Ux-gnh">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -34,7 +34,7 @@
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="123.88392857142857"/>
         </scene>
-        <!--Home Page-->
+        <!--Drive-->
         <scene sceneID="LMg-aM-rZ5">
             <objects>
                 <viewController id="lR3-XP-5So" customClass="HomePage" customModule="FPlayer" customModuleProvider="target" sceneMemberID="viewController">
@@ -85,36 +85,27 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hIF-Rk-hsf">
-                                <rect key="frame" x="0.0" y="88" width="414" height="674"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="625"/>
                                 <color key="backgroundColor" name="Background"/>
                                 <connections>
                                     <outlet property="dataSource" destination="lR3-XP-5So" id="5uv-sq-VYQ"/>
                                     <outlet property="delegate" destination="lR3-XP-5So" id="imS-zt-fMH"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K7C-1I-eTb" customClass="MiniPlayerView" customModule="FPlayer" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="802" width="414" height="60"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="uhf-EI-fUo"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="HYz-KN-3xA" firstAttribute="bottom" secondItem="K7C-1I-eTb" secondAttribute="bottom" id="96m-0h-1Tm"/>
-                            <constraint firstItem="K7C-1I-eTb" firstAttribute="centerX" secondItem="HYz-KN-3xA" secondAttribute="centerX" id="Ccp-1b-lbV"/>
                             <constraint firstItem="vNP-LS-peJ" firstAttribute="top" secondItem="HYz-KN-3xA" secondAttribute="top" id="M4G-b1-c3W"/>
                             <constraint firstItem="vNP-LS-peJ" firstAttribute="centerX" secondItem="HYz-KN-3xA" secondAttribute="centerX" id="Tbh-9U-Phi"/>
                             <constraint firstItem="hIF-Rk-hsf" firstAttribute="centerX" secondItem="HYz-KN-3xA" secondAttribute="centerX" id="UVz-kF-KWF"/>
                             <constraint firstItem="hIF-Rk-hsf" firstAttribute="width" secondItem="iYb-Fr-YvZ" secondAttribute="width" id="aAD-pe-CX8"/>
                             <constraint firstItem="hIF-Rk-hsf" firstAttribute="top" secondItem="vNP-LS-peJ" secondAttribute="bottom" id="gQG-0C-Usr"/>
-                            <constraint firstItem="K7C-1I-eTb" firstAttribute="width" secondItem="iYb-Fr-YvZ" secondAttribute="width" id="ls0-cz-Mm5"/>
                             <constraint firstItem="vNP-LS-peJ" firstAttribute="width" secondItem="iYb-Fr-YvZ" secondAttribute="width" id="m8K-3r-UFv"/>
                             <constraint firstItem="HYz-KN-3xA" firstAttribute="bottom" secondItem="hIF-Rk-hsf" secondAttribute="bottom" constant="100" id="xWO-HV-XO8"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="HYz-KN-3xA"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Drive" id="QGh-4z-Rrh"/>
                     <connections>
                         <outlet property="backButton" destination="g77-dT-DbV" id="itt-tI-LEq"/>
                         <outlet property="table" destination="hIF-Rk-hsf" id="t9f-S4-5yZ"/>
@@ -335,6 +326,111 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1Bt-nl-5o6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="894.20289855072474" y="792.85714285714278"/>
+        </scene>
+        <!--Playlists-->
+        <scene sceneID="sNo-sH-OUC">
+            <objects>
+                <navigationController id="CrO-xE-Hrr" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Playlists" id="7ye-Na-lu5"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="WRk-Q7-ykq">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="LZd-5R-cq5" kind="relationship" relationship="rootViewController" id="2im-NL-GEb"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pmA-E9-7Om" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="132" y="1465"/>
+        </scene>
+        <!--Playlists Page-->
+        <scene sceneID="hVV-QK-jt0">
+            <objects>
+                <viewController id="LZd-5R-cq5" customClass="PlaylistsPage" customModule="FPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="3H6-wR-QC8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PDG-Nt-S9E">
+                                <rect key="frame" x="0.0" y="88" width="414" height="665"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="LZd-5R-cq5" id="GI7-Op-COG"/>
+                                    <outlet property="delegate" destination="LZd-5R-cq5" id="kJ7-hk-dU5"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="r7G-Nr-uZL" firstAttribute="trailing" secondItem="PDG-Nt-S9E" secondAttribute="trailing" id="8cK-ZD-Sji"/>
+                            <constraint firstItem="PDG-Nt-S9E" firstAttribute="top" secondItem="r7G-Nr-uZL" secondAttribute="top" id="eAp-4N-tzr"/>
+                            <constraint firstItem="r7G-Nr-uZL" firstAttribute="bottom" secondItem="PDG-Nt-S9E" secondAttribute="bottom" constant="60" id="j49-3J-uVe"/>
+                            <constraint firstItem="PDG-Nt-S9E" firstAttribute="leading" secondItem="r7G-Nr-uZL" secondAttribute="leading" id="ow4-cU-aZl"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="r7G-Nr-uZL"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="hgG-gh-16a"/>
+                    <connections>
+                        <outlet property="dataTable" destination="PDG-Nt-S9E" id="NEq-A9-fXF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yUM-0P-Nod" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="892.75362318840587" y="1464.5089285714284"/>
+        </scene>
+        <!--Root Tab Page-->
+        <scene sceneID="ABP-op-Wwi">
+            <objects>
+                <tabBarController id="3Gn-Ux-gnh" customClass="RootTabPage" customModule="FPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="R67-Al-BX8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="lR3-XP-5So" kind="relationship" relationship="viewControllers" id="EBR-oR-C4T"/>
+                        <segue destination="CrO-xE-Hrr" kind="relationship" relationship="viewControllers" id="bWF-PH-huN"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pl9-Ja-L7M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-686" y="540"/>
+        </scene>
+        <!--Playlist Page-->
+        <scene sceneID="HKa-vv-PYX">
+            <objects>
+                <viewController storyboardIdentifier="PlaylistPage" id="AJp-9e-blB" customClass="PlaylistPage" customModule="FPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="m9q-SL-Ra2">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="faq-hO-LE7">
+                                <rect key="frame" x="0.0" y="44" width="414" height="758"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="AJp-9e-blB" id="l0c-lC-0fl"/>
+                                    <outlet property="delegate" destination="AJp-9e-blB" id="Pnb-xD-Qw1"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="faq-hO-LE7" firstAttribute="leading" secondItem="lzE-mU-kHa" secondAttribute="leading" id="4bH-hr-eb3"/>
+                            <constraint firstItem="faq-hO-LE7" firstAttribute="top" secondItem="lzE-mU-kHa" secondAttribute="top" id="Ev3-gN-X9N"/>
+                            <constraint firstItem="lzE-mU-kHa" firstAttribute="trailing" secondItem="faq-hO-LE7" secondAttribute="trailing" id="YDM-HI-l3x"/>
+                            <constraint firstItem="lzE-mU-kHa" firstAttribute="bottom" secondItem="faq-hO-LE7" secondAttribute="bottom" constant="60" id="qLd-mL-7ie"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="lzE-mU-kHa"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="GCd-YM-ABN"/>
+                    <connections>
+                        <outlet property="dataTable" destination="faq-hO-LE7" id="eSf-oV-3P1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xBI-xh-Pfl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1645" y="1465"/>
         </scene>
     </scenes>
     <resources>

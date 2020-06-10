@@ -322,6 +322,7 @@ UITableViewDelegate, UITableViewDataSource {
             print("login success: ")
             print((String(describing: GIDSignIn.sharedInstance()?.currentUser.authentication.accessToken)))
             let account = GDAccount(user: user)
+            GDUtility.shared.setupCurrentService(user: user)
             gdAccountList.append(account)
             table.reloadData()
         }

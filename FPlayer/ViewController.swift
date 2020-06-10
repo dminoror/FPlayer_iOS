@@ -15,13 +15,10 @@ import TagLibIOS
 
 class ViewController: UIViewController, GIDSignInDelegate {
     
-
+    var ostFolder: GTLRDrive_File?
+    var playlists: [fpPlaylist]?
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance()?.scopes = [kGTLRAuthScopeDrive]
         GIDSignIn.sharedInstance()?.presentingViewController = self
@@ -32,27 +29,171 @@ class ViewController: UIViewController, GIDSignInDelegate {
             GIDSignIn.sharedInstance()?.signIn()
         }
         
-        btnTest_Clicked(0)
+        //loadPlaylists()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
+        //btnTest_Clicked(0)
+    }
+    func didSignIn() {
+        
     }
     
     var player = AVPlayer()
     @IBAction func btnTest_Clicked(_ sender: Any) {
-        
-        //let asset = AVURLAsset(url: URL(string: "https://raw.githubusercontent.com/dohProject/DLCachePlayer/master/DLCachePlayerDemo/Sample/2.%20kare.m4a")!)
-        //PlayerCore.shared.playWithPlayitems(playitems: nil, index: 0)
-        
-        let path = String(format: "%@/tmp/0.flac", NSHomeDirectory())
-        let tla = TLAudio(fileAtPath: path)
-        print(tla?.title)
-        
-        //downloadFile()
-          
         /*
-        getFolderID(name: "OST", service: googleDriveService, user: googleUser!) { (identify) in
-            print(identify)
-        }*/
+        if let playlists = playlists {
+            self.fetchGDItem(playlists: playlists)
+            return
+        }
+        let url = URL(string: "https://raw.githubusercontent.com/dminoror/FPlayer/master/FPlayer/bin/Debug/playlistDB.json")!
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let data = data {
+                let dict = (try? JSONSerialization.jsonObject(with: data, options: [])) as? Dictionary<String, Any>
+                if let playlistsData = (dict?["playlists"] as? Array<Any>)?.jsonData() {
+                    if let playlists = try? JSONDecoder().decode([fpPlaylist].self, from: playlistsData) {
+                        self.fetchGDItem(playlists: playlists)
+                        return
+                    }
+                }
+            }
+            print("fetch playlist fail")
+        }.resume()*/
+    }
+    /*
+    func savePlaylists(playlists: [fpPlaylist]) {
+        do {
+            let data = try JSONEncoder().encode(playlists)
+            let path = URL(fileURLWithPath: String(format: "%@/Library/playlists", NSHomeDirectory()))
+            //print(path)
+            try data.write(to: path)
+            //print("Save playlists Successed")
+        }
+        catch {
+            print(error)
+        }
+    }
+    func loadPlaylists() {
+        do {
+            let path = URL(fileURLWithPath: String(format: "%@/Library/playlists", NSHomeDirectory()))
+            let data = try Data(contentsOf: path)
+            playlists = try JSONDecoder().decode([fpPlaylist].self, from: data)
+            print(playlists)
+        }
+        catch {
+            print(error)
+        }
     }
     
+    var gdCache: [String : [GTLRDrive_File]]?
+    func fetchGDItem(playlists: [fpPlaylist]) {
+        gdCache = [String : [GTLRDrive_File]]()
+        
+        fetchGDItemQueue(playlists: playlists, playlistIndex: 0, playitemIndex: 0) { [playlists, weak self] in
+            print("fetch playlist finished")
+            /*
+            guard let weakSelf = self else { return }
+            weakSelf.savePlaylists(playlists: playlists)*/
+        }
+    }
+    func fetchGDItemQueue(playlists: [fpPlaylist], playlistIndex: Int, playitemIndex: Int, completion: @escaping (() -> Void)) {
+        let playlist = playlists[playlistIndex]
+        if let playitem = playlist.list?[playitemIndex] {
+            let gdID = playitem.gdID
+            let folders = playitem.folders
+            if ((gdID != nil && gdID!.count > 0) || folders == nil) {
+                print("exist playitem = \(String(describing: folders!.last)) : \(String(describing: playitem.gdID))")
+                var playitemIndex = playitemIndex + 1
+                var playlistIndex = playlistIndex
+                if (playitemIndex >= playlist.list!.count) {
+                    playitemIndex = 0
+                    playlistIndex += 1
+                    if (playlistIndex >= playlists.count) {
+                        completion()
+                        return
+                    }
+                }
+                fetchGDItemQueue(playlists: playlists, playlistIndex: playlistIndex, playitemIndex: playitemIndex, completion: completion)
+            }
+            else {
+                fetchGDFolders(head: ostFolder!, folders: folders!) { [playlists, playlistIndex, playitemIndex, completion, weak self] (file) in
+                    guard let weakSelf = self else { return }
+                    if let file = file {
+                        playitem.gdID = file.identifier
+                    }
+                    print("\(String(describing: folders!.last)) : \(String(describing: playitem.gdID))")
+                    weakSelf.savePlaylists(playlists: playlists)
+                    var playitemIndex = playitemIndex + 1
+                    var playlistIndex = playlistIndex
+                    if (playitemIndex >= playlist.list!.count) {
+                        playitemIndex = 0
+                        playlistIndex += 1
+                        if (playlistIndex >= playlists.count) {
+                            completion()
+                            return
+                        }
+                    }
+                    weakSelf.fetchGDItemQueue(playlists: playlists, playlistIndex: playlistIndex, playitemIndex: playitemIndex, completion: completion)
+                }
+            }
+        }
+        else {
+            print("error")
+        }
+    }
+    func fetchGDFolders(head: GTLRDrive_File, folders: [String], completion: @escaping ((GTLRDrive_File?) -> Void)) {
+        let nextFolderName = folders.first
+        let identifier = head.identifier!
+        if let existFolder = gdCache![identifier] {
+            if let nextFolder = existFolder.first(where: { (file) -> Bool in
+                return file.name == nextFolderName
+            }) {
+                if (folders.count == 1) {
+                    completion(nextFolder)
+                }
+                else {
+                    var folders = folders
+                    folders.remove(at: 0)
+                    fetchGDFolders(head: nextFolder, folders: folders, completion: completion)
+                }
+                return
+            }
+            else {
+                print("nextFolderName not found")
+                //_ = fileList.map({ print($0.name!) })
+                completion(nil)
+            }
+            return
+        }
+        GDUtility.listGoogleFolder(service: googleDriveService, identify: identifier) { [identifier, nextFolderName, folders, completion, weak self] (fileList) in
+            if let fileList = fileList,
+                let weakSelf = self {
+                weakSelf.gdCache!.updateValue(fileList, forKey: identifier)
+                if let nextFolder = fileList.first(where: { (file) -> Bool in
+                    return file.name == nextFolderName
+                }) {
+                    if (folders.count == 1) {
+                        completion(nextFolder)
+                    }
+                    else {
+                        var folders = folders
+                        folders.remove(at: 0)
+                        weakSelf.fetchGDFolders(head: nextFolder, folders: folders, completion: completion)
+                    }
+                    return
+                }
+                else {
+                    print("nextFolderName not found")
+                    //_ = fileList.map({ print($0.name!) })
+                    completion(nil)
+                }
+            }
+            //print("error")
+        }
+    }
+    */
     let googleDriveService = GTLRDriveService()
     var googleUser: GIDGoogleUser?
     
@@ -62,8 +203,10 @@ class ViewController: UIViewController, GIDSignInDelegate {
             // Include authorization headers/values with each Drive API request.
             print("login success: ")
             self.googleDriveService.authorizer = user.authentication.fetcherAuthorizer()
+            self.googleDriveService.shouldFetchNextPages = true
             self.googleUser = user
             print(GIDSignIn.sharedInstance()?.currentUser.authentication.accessToken)
+            didSignIn()
         } else {
             print("login error: ", error!)
             self.googleDriveService.authorizer = nil
