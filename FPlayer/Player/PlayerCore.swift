@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MediaPlayer
 
 enum playerMetadataType: String {
     case title = "title"
@@ -15,11 +16,16 @@ enum playerMetadataType: String {
     case artwork = "artwork"
 }
 
+enum playerRandomMode {
+    case none, random
+}
+enum playerLoopMode {
+    case none, loop, single
+}
+
 class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegate {
     
     static let shared = PlayerCore()
-    
-    var currentMetadata: [String : Any]?
     
     override init() {
         super.init()
@@ -30,10 +36,24 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         } catch {
             print(error)
         }
+        let remoteCenter = MPRemoteCommandCenter.shared()
+        remoteCenter.previousTrackCommand.isEnabled = true
+        remoteCenter.previousTrackCommand.addTarget(self, action: #selector(didPrevCommand_Received))
+        remoteCenter.nextTrackCommand.isEnabled = true
+        remoteCenter.nextTrackCommand.addTarget(self, action: #selector(didNextCommand_Received))
+        remoteCenter.playCommand.isEnabled = true
+        remoteCenter.playCommand.addTarget(self, action: #selector(didPlayPauseCommand_Received))
+        remoteCenter.pauseCommand.isEnabled = true
+        remoteCenter.pauseCommand.addTarget(self, action: #selector(didPlayPauseCommand_Received))
     }
     
-    var playlist: [Playitem]?
+    var playlist: [PlaylistItem]?
     var playIndex = 0
+    var currentPlaylistItem: PlaylistItem?
+    var currentPlayerItem: DLPlayerItem?
+    var randomPlaylist: [PlaylistItem]?
+    var randomMode: playerRandomMode = .random
+    var loopMode: playerLoopMode = .loop
     
     // MARK: Player Info
     
@@ -48,7 +68,10 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     }
     var currentTitle: String? {
         get {
-            if let value = currentMetadata?["title"] as? String {
+            if let value = currentPlayerItem?.metadata?["title"] as? String {
+                return value
+            }
+            if let value = currentPlaylistItem?.name {
                 return value
             }
             return nil
@@ -56,7 +79,7 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     }
     var currentArtist: String? {
         get {
-            if let value = currentMetadata?["artist"] as? String {
+            if let value = currentPlayerItem?.metadata?["artist"] as? String {
                 return value
             }
             return nil
@@ -64,7 +87,7 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     }
     var currentArtwork: UIImage? {
         get {
-            if let value = currentMetadata?["artwork"] as? UIImage {
+            if let value = currentPlayerItem?.metadata?["artwork"] as? UIImage {
                 return value
             }
             return nil
@@ -72,6 +95,7 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     }
     
     // MARK: DLCachePlayer Action
+    @objc
     func switchState() {
         if (DLCachePlayer.sharedInstance()?.playState == .pause) {
             DLCachePlayer.sharedInstance()?.resume()
@@ -83,14 +107,55 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
             DLCachePlayer.sharedInstance()?.pause()
         }
     }
-    func next() {
-        if let playlist = playlist {
-            playIndex += 1
-            if (playIndex >= playlist.count) {
-                playIndex = 0
-            }
-            DLCachePlayer.sharedInstance()?.resetAndPlay()
+    
+    @objc
+    func didPlayPauseCommand_Received() -> MPRemoteCommandHandlerStatus {
+        switchState()
+        return .success
+    }
+    @objc
+    func didNextCommand_Received() -> MPRemoteCommandHandlerStatus {
+        next()
+        return .success
+    }
+    @objc
+    func didPrevCommand_Received() -> MPRemoteCommandHandlerStatus {
+        prev()
+        return .success
+    }
+    
+    func getNextPlayerIndex() -> Int? {
+        if (loopMode == .single) {
+            return playIndex
         }
+        let list = (randomMode == .none) ? playlist : randomPlaylist
+        if let list = list {
+            var index = playIndex + 1
+            if (index >= list.count) {
+                if (loopMode == .loop) {
+                    index = 0
+                }
+                else {
+                    return nil
+                }
+            }
+            return index
+        }
+        return nil
+    }
+    func getPlaylistItem(index: Int) -> PlaylistItem? {
+        if (randomMode == .none) {
+            return playlist?[index]
+        }
+        else {
+            return randomPlaylist?[index]
+        }
+    }
+    func next() {
+        if let index = getNextPlayerIndex() {
+            playIndex = index
+        }
+        DLCachePlayer.sharedInstance()?.resetAndPlay()
     }
     func prev() {
         if let playlist = playlist {
@@ -102,57 +167,92 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         }
     }
     func seek(time: TimeInterval) {
-        DLCachePlayer.sharedInstance()?.seek(toTimeInterval: time, completionHandler: nil)
+        DLCachePlayer.sharedInstance()?.seek(toTimeInterval: time, completionHandler: { (result) in
+            if (result) {
+                if var playerInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo,
+                    let currentTime = PlayerCore.shared.currentTime() {
+                    playerInfo.updateValue(currentTime, forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
+                    MPNowPlayingInfoCenter.default().nowPlayingInfo = playerInfo
+                }
+            }
+        })
+    }
+    func switchRandom() {
+        switch randomMode {
+        case .none:
+            randomMode = .random
+            makeRandomPlaylist()
+        case .random:
+            randomMode = .none
+        }
+    }
+    func makeRandomPlaylist() {
+        randomPlaylist = playlist?.shuffled()
+    }
+    func switchLoop() {
+        switch loopMode {
+        case .none:
+            loopMode = .loop
+        case .loop:
+            loopMode = .single
+        case .single:
+            loopMode = .none
+        }
     }
     
+    
     // MARK: DLCachePlayer Delegate
-    func playWithPlayitems(playitems: [Playitem]?, index: Int) {
+    func playWithPlayitems(playitems: [PlaylistItem]?, index: Int) {
         playlist = playitems
-        playIndex = index
+        makeRandomPlaylist()
+        if (randomMode == .none) {
+            playIndex = index
+        }
+        else {
+            let randIndex = (randomPlaylist?.firstIndex(where: { (item) -> Bool in
+                return item === playitems![index]
+            }))!
+            playIndex = randIndex
+        }
         DLCachePlayer.sharedInstance()?.resetAndPlay()
     }
     
-    func playerGetCurrentPlayURL(_ block: ((URL?, Bool) -> AVPlayerItem?)!) {
-        //https://www.googleapis.com/drive/v3/files/1KHyOzaHF2y43rhn0y_HHY2lMPiujk1Jt?alt=media  playable
-        //https://www.googleapis.com/drive/v3/files/1JzVt83KGCOY7kOA844O-PLcwC3FHOr_8?alt=media  no play
-        //https://www.googleapis.com/drive/v3/files/1hQ6O0dog7SoDax9poGG21bML56pYvWNv?alt=media  playable flac
-        //https://www.googleapis.com/drive/v3/files/1rvD5sojO4XPHLU3DJZC1A_2I_uBh14mj?alt=media  no play flac
-        
-        //block(URL(string: "https://www.googleapis.com/drive/v3/files/1rvD5sojO4XPHLU3DJZC1A_2I_uBh14mj?alt=media"), true)
-        
-        //block(URL(string: "https://www.googleapis.com/drive/v3/files/1KHyOzaHF2y43rhn0y_HHY2lMPiujk1Jt?alt=media"), true)
-        //block(URL(string: "https://www.googleapis.com/drive/v3/files/1JzVt83KGCOY7kOA844O-PLcwC3FHOr_8?alt=media"), true)
-        //return
-        if let playitem = playlist?[optional: playIndex] {
-            if let url = URL.urlFromString(string: playitem.getPlayURL()) {
-                _ = block(url, true)
+    func playerGetCurrentPlayerItem(_ block: ((DLPlayerItem?, Bool) -> DLPlayerItem?)!) {
+        if let playlistItem = getPlaylistItem(index: playIndex),
+            let url = URL.urlFromString(string: playlistItem.getPlayURL()) {
+            let playerItem = DLPlayerItem()
+            playerItem.url = url
+            playerItem.identify = playlistItem.identify
+            currentPlaylistItem = playlistItem
+            currentPlayerItem = block(playerItem, true)
+            if (currentPlayerItem?.metadata != nil) {
+                playerGotMetadata(currentPlayerItem, metadata: currentPlayerItem?.metadata)
             }
         }
     }
-    /*
-    func playerGetPreloadPlayURL(_ block: ((URL?, Bool) -> AVPlayerItem?)!) {
-        guard let index = playIndex else { return }
-        if let playitem = playlist?[optional: index + 1] {
-            if let url = URL.urlFromString(string: playitem.getPlayURL()) {
-                _ = block(url, true)
-            }
+    
+    func playerGetPreloadPlayerItem(_ block: ((DLPlayerItem?, Bool) -> DLPlayerItem?)!) {
+        if let nextIndex = getNextPlayerIndex(),
+            let playlistItem = getPlaylistItem(index: nextIndex),
+            let url = URL.urlFromString(string: playlistItem.getPlayURL()) {
+            let playerItem = DLPlayerItem()
+            print("preload next item: \(playlistItem.name!)")
+            playerItem.url = url
+            playerItem.identify = playlistItem.identify
+            _ = block(playerItem, true)
         }
-    }*/
-    func playerCacheProgress(_ playerItem: AVPlayerItem!, isCurrent: Bool, tasks: NSMutableArray!, totalBytes: UInt) {
-        if (isCurrent) {
+    }
+    func playerCacheProgress(_ playerItem: DLPlayerItem!, tasks: NSMutableArray!, totalBytes: UInt) {
+        if (playerItem === currentPlaylistItem) {
             NotificationCenter.default.post(name: NSNotification.Name("playerCacheProgress"), object: ["tasks" : tasks!, "totalBytes": totalBytes])
         }
-    }/*
-    func playerDidFinishCache(_ playerItem: AVPlayerItem!, isCurrent: Bool, data: Data!) {
-        
-    }*/
+    }
     
     func playerPlayerItemChanged(_ playerItem: AVPlayerItem!) {
-        currentMetadata = nil
         NotificationCenter.default.post(name: NSNotification.Name("playerPlayerItemChanged"), object: nil)
     }
-    func playerGotMetadata(_ metadatas: [AnyHashable : Any]!) {
-        currentMetadata = metadatas.reduce(into: [String : Any]()) { (dict, metadata) in
+    func playerGotMetadata(_ playerItem: DLPlayerItem!, metadata metadatas: [AnyHashable : Any]!) {
+        let newMetadata = playerItem.metadata!.reduce(into: [String : Any]()) { (dict, metadata) in
             if let key = metadata.key as? String {
                 if let value = metadata.value as? Data,
                     key.contains("artwork"),
@@ -164,10 +264,45 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
                 }
             }
         }
-        NotificationCenter.default.post(name: NSNotification.Name("playerGotMetadata"), object: nil)
+        playerItem.metadata = newMetadata
+        if playerItem === currentPlayerItem {
+            var playerInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo != nil ? MPNowPlayingInfoCenter.default().nowPlayingInfo! : [String : Any]()
+            if let title = currentTitle {
+                playerInfo.updateValue(title, forKey: MPMediaItemPropertyTitle)
+            }
+            if let artist = currentArtist {
+                playerInfo.updateValue(artist, forKey: MPMediaItemPropertyArtist)
+            }
+            if let artwork = currentArtwork {
+                let mpmedia = MPMediaItemArtwork(boundsSize: artwork.size) { (size) -> UIImage in
+                    return artwork
+                }
+                playerInfo.updateValue(mpmedia, forKey: MPMediaItemPropertyArtwork)
+            }
+            if let currentTime = currentTime() {
+                playerInfo.updateValue(currentTime, forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
+            }
+            if let currentDuration = totalTime() {
+                playerInfo.updateValue(currentDuration, forKey: MPMediaItemPropertyPlaybackDuration)
+            }
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = playerInfo
+            NotificationCenter.default.post(name: NSNotification.Name("playerGotMetadata"), object: nil)
+        }
     }
     func playerDidPlayStateChanged(_ state: DLCachePlayerPlayState) {
         NotificationCenter.default.post(name: NSNotification.Name("playerDidPlayStateChanged"), object: nil)
+        if var playerInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo,
+            let rate = state == .playing ? 1.0 : 0.0 {
+            playerInfo.updateValue(rate, forKey: MPNowPlayingInfoPropertyPlaybackRate)
+            if let currentTime = currentTime() {
+                playerInfo.updateValue(currentTime, forKey: MPNowPlayingInfoPropertyElapsedPlaybackTime)
+            }
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = playerInfo
+        }
+    }
+    func playerDidReachEnd(_ playerItem: AVPlayerItem!) {
+        print("did Reach End")
+        next()
     }
     
     func playerReadyToPlay() {

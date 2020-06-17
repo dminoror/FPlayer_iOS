@@ -9,9 +9,9 @@
 import Foundation
 import GoogleAPIClientForREST
 
-class Playitem {
+class PlaylistItem {
     var name: String?
-    
+    var identify: String?
     var playURL: [String]?
     
     required init() {
@@ -21,12 +21,14 @@ class Playitem {
     convenience init(file: GTLRDrive_File) {
         self.init()
         playURL?.append("https://www.googleapis.com/drive/v3/files/\(file.identifier!)?alt=media")
-        name = file.name
+        self.name = file.name
+        self.identify = file.identifier
     }
     convenience init(gdID: String, name: String?) {
         self.init()
         playURL?.append("https://www.googleapis.com/drive/v3/files/\(gdID)?alt=media")
         self.name = name
+        self.identify = gdID
     }
     
     func getPlayURL() -> String? {
@@ -83,16 +85,16 @@ class fpPlaylist: NSObject, Codable {
     var name: String?
     var list: [fpPlayitem]?
     
-    private var _playitems: [Playitem]?
-    var playitem: [Playitem]? {
+    private var _playitems: [PlaylistItem]?
+    var playitem: [PlaylistItem]? {
         get {
             if let playitems = _playitems {
                 return playitems
             }
             else {
-                let playitems = list?.reduce(into: [Playitem](), { (result, playitem) in
+                let playitems = list?.reduce(into: [PlaylistItem](), { (result, playitem) in
                     if let gdID = playitem.gdID {
-                        let playerItem = Playitem(gdID: gdID, name: playitem.name)
+                        let playerItem = PlaylistItem(gdID: gdID, name: playitem.name)
                         result.append(playerItem)
                     }
                 })

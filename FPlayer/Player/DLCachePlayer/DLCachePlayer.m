@@ -12,7 +12,7 @@
 {
     DLResourceLoader * currentLoader;
     DLResourceLoader * preloadLoader;
-    AVPlayerItem * loadingPlayerItem;
+    DLPlayerItem * loadingPlayerItem;
 }
 @synthesize audioPlayer, delegate, tempFilePath;
 @synthesize downloadState, playState;
@@ -160,20 +160,27 @@
 {
     if (self.audioPlayer.currentItem)
     {
-        NSTimeInterval time = CMTimeGetSeconds(self.audioPlayer.currentItem.duration);
+        NSTimeInterval time;
+        if ([self.audioPlayer.currentItem.asset isKindOfClass:[AVURLAsset class]]) {
+            AVURLAsset *asset = (AVURLAsset *)self.audioPlayer.currentItem.asset;
+            time = CMTimeGetSeconds(asset.duration);
+            if (time == time && time > 0)
+                return time;
+        }
+        time = CMTimeGetSeconds(self.audioPlayer.currentItem.duration);
         if (time == time)
-            return time;
+            return time; 
     }
     return 0;
 }
 
 - (void)cachedProgress:(AVPlayerItem *)playerItem result:(void (^)(NSMutableArray * tasks, NSUInteger totalBytes))result
 {
-    if ([playerItem isEqual:currentLoader.playerItem])
+    if ([playerItem isEqual:currentLoader.playerItem.avPlayerItem])
     {
         SAFE_BLOCK(result, currentLoader.tasks, currentLoader.totalLength);
     }
-    else if ([playerItem isEqual:preloadLoader.playerItem])
+    else if ([playerItem isEqual:preloadLoader.playerItem.avPlayerItem])
     {
         SAFE_BLOCK(result, preloadLoader.tasks, preloadLoader.totalLength);
     }
@@ -194,51 +201,54 @@
     [audioPlayer replaceCurrentItemWithPlayerItem:nil];
     [self playerDidPlayStateChanged:DLCachePlayerPlayStateInit];
     __weak __typeof__(self) weakSelf = self;
-    if ([self.delegate respondsToSelector:@selector(playerGetCurrentPlayURL:)])
+    if ([self.delegate respondsToSelector:@selector(playerGetCurrentPlayerItem:)])
     {
-        [self.delegate playerGetCurrentPlayURL:^AVPlayerItem *(NSURL *url, BOOL cache) {
-            if (url.absoluteString.length > 0)
+        [self.delegate playerGetCurrentPlayerItem:^DLPlayerItem *(DLPlayerItem *playerItem, BOOL cache) {
+            if (playerItem.url.absoluteString.length > 0)
             {
                 downloadState = DLCachePlayerDownloadStateCurrent;
-                if ([url isFileURL] || !cache)
+                if ([playerItem.url isFileURL] || !cache)
                 {
-                    AVPlayerItem * playerItem = [AVPlayerItem playerItemWithURL:url];
-                    [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
+                    AVPlayerItem * avPlayerItem = [AVPlayerItem playerItemWithURL:playerItem.url];
+                    [audioPlayer replaceCurrentItemWithPlayerItem:avPlayerItem];
                     [audioPlayer play];
                     [weakSelf setupPreloadPlayerItem];
+                    playerItem.avPlayerItem = avPlayerItem;
                     return playerItem;
                 }
-                else if ([loadingPlayerItem.asset isKindOfClass:[AVURLAsset class]] &&
-                         [((AVURLAsset *)loadingPlayerItem.asset).URL.resourceSpecifier isEqualToString:url.resourceSpecifier])
+                else if ([loadingPlayerItem.avPlayerItem.asset isKindOfClass:[AVURLAsset class]] &&
+                         [((AVURLAsset *)loadingPlayerItem.avPlayerItem.asset).URL.resourceSpecifier isEqualToString:playerItem.url.resourceSpecifier])
                 {
-                    currentLoader = ((DLResourceLoader *)((AVURLAsset *)loadingPlayerItem.asset).resourceLoader.delegate);
-                    [audioPlayer replaceCurrentItemWithPlayerItem:loadingPlayerItem];
+                    currentLoader = ((DLResourceLoader *)((AVURLAsset *)loadingPlayerItem.avPlayerItem.asset).resourceLoader.delegate);
+                    [audioPlayer replaceCurrentItemWithPlayerItem:loadingPlayerItem.avPlayerItem];
                     [audioPlayer play];
                     if ([self currentTime] > 0)
                     {
                         [self seekToTimeInterval:0 completionHandler:nil];
                     }
+                    id tempPlayerItem = loadingPlayerItem;
                     if (currentLoader.finished)
                     {
                         [weakSelf setupPreloadPlayerItem];
                     }
-                    return loadingPlayerItem;
+                    return tempPlayerItem;
                 }
                 else
                 {
-                    AVURLAsset * asset = [AVURLAsset URLAssetWithURL:[self customSchemeURL:url] options:nil];
+                    AVURLAsset * asset = [AVURLAsset URLAssetWithURL:[self customSchemeURL:playerItem.url] options:nil];
                     if (!preloadLoader.finished)
                     {
                         [preloadLoader stopLoading];
                     }
                     currentLoader = [[DLResourceLoader alloc] init];
-                    currentLoader.originScheme = url.scheme;
+                    currentLoader.originScheme = playerItem.url.scheme;
                     currentLoader.delegate = self;
                     [asset.resourceLoader setDelegate:currentLoader queue:self.queueDL];
-                    AVPlayerItem * playerItem = [AVPlayerItem playerItemWithAsset:asset];
+                    AVPlayerItem * avPlayerItem = [AVPlayerItem playerItemWithAsset:asset];
                     currentLoader.playerItem = playerItem;
+                    currentLoader.playerItem.avPlayerItem = avPlayerItem;
                     loadingPlayerItem = playerItem;
-                    [audioPlayer replaceCurrentItemWithPlayerItem:playerItem];
+                    [audioPlayer replaceCurrentItemWithPlayerItem:avPlayerItem];
                     [audioPlayer play];
                     return playerItem;
                 }
@@ -254,38 +264,48 @@
 }
 - (void)setupPreloadPlayerItem
 {
-    if ([self.delegate respondsToSelector:@selector(playerGetPreloadPlayURL:)])
+    if ([self.delegate respondsToSelector:@selector(playerGetPreloadPlayerItem:)])
     {
-        [self.delegate playerGetPreloadPlayURL:^AVPlayerItem *(NSURL *url, BOOL cache) {
-            if (url.absoluteString.length > 0)
+        [self.delegate playerGetPreloadPlayerItem:^DLPlayerItem *(DLPlayerItem *playerItem, BOOL cache) {
+            if (playerItem.url.absoluteString.length > 0)
             {
                 downloadState = DLCachePlayerDownloadStateProload;
-                if ([url isFileURL] || !cache)
+                if ([playerItem.url isFileURL] || !cache)
                 {
-                    return [AVPlayerItem playerItemWithURL:url];
+                    AVPlayerItem *avPlayerItem = [AVPlayerItem playerItemWithURL:playerItem.url];
+                    playerItem.avPlayerItem = avPlayerItem;
+                    return playerItem;
                 }
-                else if ([loadingPlayerItem.asset isKindOfClass:[AVURLAsset class]] &&
-                         [((AVURLAsset *)loadingPlayerItem.asset).URL.resourceSpecifier isEqualToString:url.resourceSpecifier])
+                else if ([loadingPlayerItem.avPlayerItem.asset isKindOfClass:[AVURLAsset class]] &&
+                         [((AVURLAsset *)loadingPlayerItem.avPlayerItem.asset).URL.resourceSpecifier isEqualToString:playerItem.url.resourceSpecifier])
                 {
-                    preloadLoader = ((DLResourceLoader *)((AVURLAsset *)loadingPlayerItem.asset).resourceLoader.delegate);
+                    preloadLoader = ((DLResourceLoader *)((AVURLAsset *)loadingPlayerItem.avPlayerItem.asset).resourceLoader.delegate);
                     return loadingPlayerItem;
                 }
                 else
                 {
-                    AVURLAsset * asset = [AVURLAsset URLAssetWithURL:[self customSchemeURL:url] options:nil];
+                    __block AVURLAsset * asset = [AVURLAsset URLAssetWithURL:[self customSchemeURL:playerItem.url] options:nil];
                     if (!preloadLoader.finished)
                     {
                         [preloadLoader stopLoading];
                     }
                     preloadLoader = [[DLResourceLoader alloc] init];
-                    preloadLoader.originScheme = url.scheme;
+                    preloadLoader.originScheme = playerItem.url.scheme;
                     preloadLoader.delegate = self;
                     [asset.resourceLoader setDelegate:preloadLoader queue:self.queueDL];
-                    AVPlayerItem * playerItem = [AVPlayerItem playerItemWithAsset:asset];
+                    AVPlayerItem * avPlayerItem = [AVPlayerItem playerItemWithAsset:asset];
                     preloadLoader.playerItem = playerItem;
+                    preloadLoader.playerItem.avPlayerItem = avPlayerItem;
                     loadingPlayerItem = playerItem;
+                    loadingPlayerItem.avPlayerItem = avPlayerItem;
                     NSArray * keys = @[@"duration"];
-                    [((AVURLAsset *)playerItem.asset) loadValuesAsynchronouslyForKeys:keys completionHandler:nil];
+                    //[((AVURLAsset *)avPlayerItem.asset) loadValuesAsynchronouslyForKeys:keys completionHandler:nil];
+                    //__block AVURLAsset *asset = avPlayerItem.asset;
+                    [asset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
+                        NSTimeInterval time = CMTimeGetSeconds(asset.duration);
+                        NSLog(@"preload duration = %f, asset = %@", time, asset);
+                        
+                    }];
                     return playerItem;
                 }
             }
@@ -308,8 +328,7 @@
 
 - (void)loader:(DLResourceLoader *)loader loadingSuccess:data url:(NSURL *)url
 {
-    BOOL isCurrent = [loader isEqual:currentLoader];
-    [self playerDidFinishCache:loadingPlayerItem isCurrent:isCurrent data:data];
+    [self playerDidFinishCache:loadingPlayerItem data:data];
     if (self.downloadState == DLCachePlayerDownloadStateCurrent)
     {
         [self setupPreloadPlayerItem];
@@ -319,7 +338,7 @@
 - (void)loader:(DLResourceLoader *)loader loadingFailWithError:(NSError *)error url:(NSURL *)url
 {
     BOOL isCurrent = [loader isEqual:currentLoader];
-    [self playerDidFail:loadingPlayerItem isCurrent:isCurrent error:error];
+    [self playerDidFail:loadingPlayerItem error:error];
     if (!isCurrent)
     {
         loadingPlayerItem = nil;
@@ -329,12 +348,11 @@
     downloadState = DLCachePlayerDownloadStateIdle;
 }
 - (void)loader:(DLResourceLoader *)loader gotMetadata:(NSDictionary *)metadata {
-    [self playerGotMetadata:metadata];
+    [self playerGotMetadata:loadingPlayerItem metadata:metadata];
 }
 - (void)loader:(DLResourceLoader *)loader loadingProgress:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes
 {
-    BOOL isCurrent = [loader isEqual:currentLoader];
-    [self playerCacheProgress:loadingPlayerItem isCurrent:isCurrent tasks:tasks totalBytes:totalBytes];
+    [self playerCacheProgress:loadingPlayerItem tasks:tasks totalBytes:totalBytes];
 }
 
 
@@ -430,44 +448,27 @@
 
 #pragma mark - Delegate Callback
 
-- (void)playerGetCurrentPlayURL:(AVPlayerItem * (^)(NSURL * url, BOOL cache))block
+- (void)playerDidFinishCache:(DLPlayerItem *)playerItem data:(NSData *)data
 {
-    if ([self.delegate respondsToSelector:@selector(playerGetCurrentPlayURL:)])
-    {
-        [self.delegate playerGetCurrentPlayURL:block];
+    if ([self.delegate respondsToSelector:@selector(playerDidFinishCache:data:)]) {
+        [self.delegate playerDidFinishCache:playerItem data:data];
     }
 }
-- (void)playerGetPreloadPlayURL:(AVPlayerItem * (^)(NSURL * url, BOOL cache))block
+- (void)playerDidFail:(DLPlayerItem *)playerItem error:(NSError *)error
 {
-    if ([self.delegate respondsToSelector:@selector(playerGetPreloadPlayURL:)])
-    {
-        [self.delegate playerGetPreloadPlayURL:block];
+    if ([self.delegate respondsToSelector:@selector(playerDidFail:error:)]) {
+        [self.delegate playerDidFail:playerItem error:error];
     }
 }
-- (void)playerDidFinishCache:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent data:(NSData *)data
+- (void)playerCacheProgress:(DLPlayerItem *)playerItem tasks:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes
 {
-    if ([self.delegate respondsToSelector:@selector(playerDidFinishCache:isCurrent:data:)])
-    {
-        [self.delegate playerDidFinishCache:playerItem isCurrent:isCurrent data:data];
+    if ([self.delegate respondsToSelector:@selector(playerCacheProgress:tasks:totalBytes:)]) {
+        [self.delegate playerCacheProgress:playerItem tasks:tasks totalBytes:totalBytes];
     }
 }
-- (void)playerDidFail:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent error:(NSError *)error
-{
-    if ([self.delegate respondsToSelector:@selector(playerDidFail:isCurrent:error:)])
-    {
-        [self.delegate playerDidFail:playerItem isCurrent:isCurrent error:error];
-    }
-}
-- (void)playerCacheProgress:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent tasks:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes
-{
-    if ([self.delegate respondsToSelector:@selector(playerCacheProgress:isCurrent:tasks:totalBytes:)])
-    {
-        [self.delegate playerCacheProgress:playerItem isCurrent:isCurrent tasks:tasks totalBytes:totalBytes];
-    }
-}
-- (void)playerGotMetadata:(NSDictionary *)metadatas {
-    if ([self.delegate respondsToSelector:@selector(playerGotMetadata:)]) {
-        [self.delegate playerGotMetadata:metadatas];
+- (void)playerGotMetadata:(DLPlayerItem *)playerItem metadata:(NSDictionary *)metadata {
+    if ([self.delegate respondsToSelector:@selector(playerGotMetadata:metadata:)]) {
+        [self.delegate playerGotMetadata:playerItem metadata:metadata];
     }
 }
 
@@ -517,3 +518,7 @@
 
 @end
 
+
+@implementation DLPlayerItem
+
+@end

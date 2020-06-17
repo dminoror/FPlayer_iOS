@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
-@class DLResourceLoader;
+@class DLResourceLoader, DLPlayerItem;
 @protocol DLResourceLoaderDelegate <NSObject>
 @optional
 - (void)loader:(DLResourceLoader *)loader loadingSuccess:(NSData *)data url:(NSURL *)url;
@@ -21,7 +21,7 @@
 @interface DLResourceLoader : NSObject<AVAssetResourceLoaderDelegate, NSURLSessionDataDelegate>
 
 @property (nonatomic, weak) id<DLResourceLoaderDelegate> delegate;
-@property (nonatomic, weak) AVPlayerItem * playerItem;
+@property (nonatomic, weak) DLPlayerItem * playerItem;
 @property (nonatomic, strong) NSString * originScheme;
 @property (nonatomic, strong) NSMutableArray * tasks;
 @property (nonatomic, assign) NSUInteger totalLength;

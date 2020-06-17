@@ -418,12 +418,13 @@
     }
     else
     {
-        if (!gotMetadata && self.playerItem.asset.commonMetadata.count > 0) {
+        if (!gotMetadata && self.playerItem.avPlayerItem.asset.commonMetadata.count > 0) {
+            NSMutableDictionary *dict = [NSMutableDictionary new];
+            for (AVMetadataItem *metadata in self.playerItem.avPlayerItem.asset.commonMetadata) {
+                [dict setObject:metadata.value forKey:metadata.commonKey];
+            }
+            self.playerItem.metadata = dict;
             if ([self.delegate respondsToSelector:@selector(loader:gotMetadata:)]) {
-                NSMutableDictionary *dict = [NSMutableDictionary new];
-                for (AVMetadataItem *metadata in self.playerItem.asset.commonMetadata) {
-                    [dict setObject:metadata.value forKey:metadata.commonKey];
-                }
                 [self.delegate loader:self gotMetadata:dict];
             }
             gotMetadata = YES;
@@ -453,24 +454,25 @@
         NSError *error;
         [[NSFileManager defaultManager] moveItemAtPath:oriPath toPath:newPath error:&error];
         if (!error) {
+            TLAudio *tla = [[TLAudio alloc] initWithFileAtPath:newPath];
+            NSMutableDictionary *dict = [NSMutableDictionary new];
+            if (tla.title.length > 0) {
+                [dict setObject:tla.title forKey:@"title"];
+            }
+            if (tla.artist.length > 0) {
+                [dict setObject:tla.artist forKey:@"artist"];
+            }
+            if (tla.album.length > 0) {
+                [dict setObject:tla.album forKey:@"albumName"];
+            }
+            if (tla.frontCoverPicture.length > 0) {
+                [dict setObject:tla.frontCoverPicture forKey:@"artwork"];
+            }
+            else if (tla.artistPicture.length > 0) {
+                [dict setObject:tla.artistPicture forKey:@"artwork"];
+            }
+            self.playerItem.metadata = dict;
             if ([self.delegate respondsToSelector:@selector(loader:gotMetadata:)]) {
-                TLAudio *tla = [[TLAudio alloc] initWithFileAtPath:newPath];
-                NSMutableDictionary *dict = [NSMutableDictionary new];
-                if (tla.title.length > 0) {
-                    [dict setObject:tla.title forKey:@"title"];
-                }
-                if (tla.artist.length > 0) {
-                    [dict setObject:tla.artist forKey:@"artist"];
-                }
-                if (tla.album.length > 0) {
-                    [dict setObject:tla.album forKey:@"albumName"];
-                }
-                if (tla.frontCoverPicture.length > 0) {
-                    [dict setObject:tla.frontCoverPicture forKey:@"artwork"];
-                }
-                else if (tla.artistPicture.length > 0) {
-                    [dict setObject:tla.artistPicture forKey:@"artwork"];
-                }
                 [self.delegate loader:self gotMetadata:dict];
             }
             gotMetadata = YES;

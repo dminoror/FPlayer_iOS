@@ -28,15 +28,16 @@ typedef NS_ENUM(NSInteger, DLCachePlayerPlayState) {
     DLCachePlayerPlayStatePause,
 };
 
+@class DLPlayerItem;
 @protocol DLCachePlayerDataDelegate <NSObject>
 @required
-- (void)playerGetCurrentPlayURL:(AVPlayerItem * (^)(NSURL * url, BOOL cache))block;
+- (void)playerGetCurrentPlayerItem:(DLPlayerItem * (^)(DLPlayerItem *playerItem, BOOL cache))block;
 @optional
-- (void)playerGetPreloadPlayURL:(AVPlayerItem * (^)(NSURL * url, BOOL cache))block;
-- (void)playerCacheProgress:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent tasks:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes;
-- (void)playerDidFinishCache:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent data:(NSData *)data;
-- (void)playerDidFail:(AVPlayerItem *)playerItem isCurrent:(BOOL)isCurrent error:(NSError *)error;
-- (void)playerGotMetadata:(NSDictionary *)metadatas;
+- (void)playerGetPreloadPlayerItem:(DLPlayerItem * (^)(DLPlayerItem *playerItem, BOOL cache))block;
+- (void)playerCacheProgress:(DLPlayerItem *)playerItem tasks:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes;
+- (void)playerDidFinishCache:(DLPlayerItem *)playerItem data:(NSData *)data;
+- (void)playerDidFail:(DLPlayerItem *)playerItem error:(NSError *)error;
+- (void)playerGotMetadata:(DLPlayerItem *)playerItem metadata:(NSDictionary *)metadatas;
 
 @end
 
@@ -100,5 +101,14 @@ typedef NS_ENUM(NSInteger, DLCachePlayerPlayState) {
 - (NSTimeInterval)currentDuration;
 - (void)cachedProgress:(AVPlayerItem *)playerItem result:(void (^)(NSMutableArray * tasks, NSUInteger totalBytes))result;
 
+
+@end
+
+@interface DLPlayerItem : NSObject
+
+@property (nonatomic, copy) NSString *identify;
+@property (nonatomic, strong) NSURL *url;
+@property (nonatomic, strong) AVPlayerItem *avPlayerItem;
+@property (nonatomic, strong)  NSDictionary * _Nullable metadata;
 
 @end

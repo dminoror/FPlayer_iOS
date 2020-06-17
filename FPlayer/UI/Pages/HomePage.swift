@@ -251,7 +251,7 @@ UITableViewDelegate, UITableViewDataSource {
                 
                 guard let currentFile = currentFolder?[optional: indexPath.row] else { return }
                 var index = 0
-                var playitems = [Playitem]()
+                var playitems = [PlaylistItem]()
                 guard let folder = originFolder else { return }
                 for file in folder {
                     let type = file.getIconType()
@@ -260,20 +260,20 @@ UITableViewDelegate, UITableViewDataSource {
                     }
                     if (filterType == .lossless) {
                         if (type == .flac) {
-                            let playitem = Playitem(file: file)
+                            let playitem = PlaylistItem(file: file)
                             playitems.append(playitem)
                         }
                     }
                     else if (filterType == .lossy) {
                         if (type == .mp3 || type == .m4a) {
-                            let playitem = Playitem(file: file)
+                            let playitem = PlaylistItem(file: file)
                             playitems.append(playitem)
                         }
                     }
                     else if (filterType == .none) {
                         if (type == .flac ||
                             type == .mp3 || type == .m4a) {
-                            let playitem = Playitem(file: file)
+                            let playitem = PlaylistItem(file: file)
                             playitems.append(playitem)
                         }
                     }
