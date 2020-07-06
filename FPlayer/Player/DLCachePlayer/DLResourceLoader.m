@@ -71,7 +71,7 @@
 #pragma mark - AVAssetResourceLoaderDelegate
 - (BOOL)resourceLoader:(AVAssetResourceLoader *)resourceLoader shouldWaitForLoadingOfRequestedResource:(AVAssetResourceLoadingRequest *)loadingRequest
 {
-    NSLog(@"shouldWaitForLoadingOfRequestedResource, offset = %llu, length = %ld", loadingRequest.dataRequest.requestedOffset, (long)loadingRequest.dataRequest.requestedLength);
+    //NSLog(@"shouldWaitForLoadingOfRequestedResource, offset = %llu, length = %ld", loadingRequest.dataRequest.requestedOffset, (long)loadingRequest.dataRequest.requestedLength);
     if (LOG_LOCK) NSLog(@"lock shouldWaitForLoadingOfRequestedResource");
     [lock lock];
     {

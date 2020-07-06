@@ -25,7 +25,14 @@ class PlaylistsPage: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     @objc
     func didRightItem_Clicked(sender: UIBarButtonItem?) {
-        
+        let sheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        sheet.addAction(UIAlertAction(title: "Reload Playlist", style: .default, handler: { [weak self] (action) in
+            LocalDatabase.shared.fetchPlaylists(forceReload: true) {
+                self?.dataTable.reloadData()
+            }
+        }))
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(sheet, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -9,40 +9,29 @@
 import Foundation
 import GoogleAPIClientForREST
 
-class PlaylistItem {
-    var name: String?
-    var identify: String?
-    var playURL: [String]?
-    
-    required init() {
-        
-        playURL = [String]()
-    }
-    convenience init(file: GTLRDrive_File) {
-        self.init()
-        playURL?.append("https://www.googleapis.com/drive/v3/files/\(file.identifier!)?alt=media")
-        self.name = file.name
-        self.identify = file.identifier
-    }
-    convenience init(gdID: String, name: String?) {
-        self.init()
-        playURL?.append("https://www.googleapis.com/drive/v3/files/\(gdID)?alt=media")
-        self.name = name
-        self.identify = gdID
-    }
-    
-    func getPlayURL() -> String? {
-        return playURL?.first
-    }
+protocol PlayableItem : NSObject {
+    var identify: String { get set }
+    var name: String? { get set }
+    var playURL: URL? { get }
 }
 
-class fpPlayitem: NSObject, Codable {
+class fpPlayitem: NSObject, Codable, PlayableItem {
+    
     static let head = "D:\\OST"
     
     var path: String?
     var gdID: String?
     private var _name: String?
-    var name: String {
+    
+    var identify: String {
+        get {
+            return gdID!
+        }
+        set {
+            gdID = newValue
+        }
+    }
+    var name: String? {
         get {
             if let name = _name {
                 return name
@@ -50,6 +39,15 @@ class fpPlayitem: NSObject, Codable {
             else {
                 return folders!.last!
             }
+        }
+        set {
+            _name = newValue
+        }
+    }
+    
+    var playURL: URL? {
+        get {
+            return URL(string: "https://www.googleapis.com/drive/v3/files/\(gdID!)?alt=media")
         }
     }
     
@@ -84,25 +82,6 @@ class fpPlaylist: NSObject, Codable {
     
     var name: String?
     var list: [fpPlayitem]?
-    
-    private var _playitems: [PlaylistItem]?
-    var playitem: [PlaylistItem]? {
-        get {
-            if let playitems = _playitems {
-                return playitems
-            }
-            else {
-                let playitems = list?.reduce(into: [PlaylistItem](), { (result, playitem) in
-                    if let gdID = playitem.gdID {
-                        let playerItem = PlaylistItem(gdID: gdID, name: playitem.name)
-                        result.append(playerItem)
-                    }
-                })
-                _playitems = playitems
-                return playitems
-            }
-        }
-    }
     
     enum CodingKeys: String, CodingKey {
         case name, list

@@ -41,8 +41,10 @@ UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if (GIDSignIn.sharedInstance()?.hasPreviousSignIn() ?? false) {
-            GIDSignIn.sharedInstance()?.delegate = self
+        GIDSignIn.sharedInstance()?.delegate = self
+        GIDSignIn.sharedInstance()?.scopes = [kGTLRAuthScopeDrive]
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        if ((GIDSignIn.sharedInstance()?.hasPreviousSignIn()) == true) {
             GIDSignIn.sharedInstance()?.restorePreviousSignIn()
         }
         /*
@@ -228,9 +230,6 @@ UITableViewDelegate, UITableViewDataSource {
         if (folderIndex == 0) {
             if (indexPath.row == 0) {
                 if (gdAccountList.count == 0) {
-                    GIDSignIn.sharedInstance()?.delegate = self
-                    GIDSignIn.sharedInstance()?.scopes = [kGTLRAuthScopeDrive]
-                    GIDSignIn.sharedInstance()?.presentingViewController = self
                     GIDSignIn.sharedInstance()?.signIn()
                 }
             }
@@ -251,7 +250,7 @@ UITableViewDelegate, UITableViewDataSource {
                 
                 guard let currentFile = currentFolder?[optional: indexPath.row] else { return }
                 var index = 0
-                var playitems = [PlaylistItem]()
+                var playitems = [PlayableItem]()
                 guard let folder = originFolder else { return }
                 for file in folder {
                     let type = file.getIconType()
@@ -260,20 +259,26 @@ UITableViewDelegate, UITableViewDataSource {
                     }
                     if (filterType == .lossless) {
                         if (type == .flac) {
-                            let playitem = PlaylistItem(file: file)
+                            let playitem = fpPlayitem()
+                            playitem.gdID = file.identifier
+                            playitem.name = file.name
                             playitems.append(playitem)
                         }
                     }
                     else if (filterType == .lossy) {
                         if (type == .mp3 || type == .m4a) {
-                            let playitem = PlaylistItem(file: file)
+                            let playitem = fpPlayitem()
+                            playitem.gdID = file.identifier
+                            playitem.name = file.name
                             playitems.append(playitem)
                         }
                     }
                     else if (filterType == .none) {
                         if (type == .flac ||
                             type == .mp3 || type == .m4a) {
-                            let playitem = PlaylistItem(file: file)
+                            let playitem = fpPlayitem()
+                            playitem.gdID = file.identifier
+                            playitem.name = file.name
                             playitems.append(playitem)
                         }
                     }

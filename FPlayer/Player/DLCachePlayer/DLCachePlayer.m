@@ -13,6 +13,7 @@
     DLResourceLoader * currentLoader;
     DLResourceLoader * preloadLoader;
     DLPlayerItem * loadingPlayerItem;
+    NSTimeInterval bufferTime;
 }
 @synthesize audioPlayer, delegate, tempFilePath;
 @synthesize downloadState, playState;
@@ -105,6 +106,9 @@
     {
         [self.audioPlayer pause];
         [self playerDidPlayStateChanged:DLCachePlayerPlayStatePause];
+    }
+    if (playState == DLCachePlayerPlayStateBuffering) {
+        bufferTime = 0;
     }
 }
 - (void)resume
@@ -352,6 +356,14 @@
 }
 - (void)loader:(DLResourceLoader *)loader loadingProgress:(NSMutableArray *)tasks totalBytes:(NSUInteger)totalBytes
 {
+    if ([loader isEqual:currentLoader] && bufferTime > 0) {
+        NSTimeInterval bufferSeconds = [[NSDate date] timeIntervalSince1970] - bufferTime;
+        NSLog(@"buffer seconds = %f", bufferSeconds);
+        if (bufferSeconds > 3) {
+            bufferTime = 0;
+            [self resume];
+        }
+    }
     [self playerCacheProgress:loadingPlayerItem tasks:tasks totalBytes:totalBytes];
 }
 
@@ -379,6 +391,10 @@
         {
             if (isPlaying)
                 [self playerDidPlayStateChanged:DLCachePlayerPlayStatePlaying];
+        }
+        if (!isPlaying && playState == DLCachePlayerPlayStatePlaying) {
+            bufferTime = [[NSDate date] timeIntervalSince1970];
+            [self playerDidPlayStateChanged:DLCachePlayerPlayStateBuffering];
         }
         [self playerPlayingChanged:isPlaying];
     }
@@ -495,6 +511,7 @@
 }
 - (void)playerPlayerItemChanged:(AVPlayerItem *)playerItem
 {
+    bufferTime = 0;
     if ([self.delegate respondsToSelector:@selector(playerPlayerItemChanged:)])
     {
         [self.delegate playerPlayerItemChanged:playerItem];

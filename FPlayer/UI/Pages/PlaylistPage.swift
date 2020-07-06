@@ -24,6 +24,19 @@ class PlaylistPage: UIViewController, UITableViewDelegate, UITableViewDataSource
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(playerPlayerItemChanged), name: NSNotification.Name("playerPlayerItemChanged"), object: nil)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc
+    func playerPlayerItemChanged() {
+        DispatchQueue.main.async {
+            print("playeritem changed")
+            self.dataTable.reloadData()
+        }
     }
     
     @objc
@@ -43,17 +56,25 @@ class PlaylistPage: UIViewController, UITableViewDelegate, UITableViewDataSource
         if (cell == nil) {
             cell = UITableViewCell(style: .default, reuseIdentifier: "playlistCell")
         }
+        cell?.tag = indexPath.row
         if let list = playlist?.list {
-            cell?.textLabel?.text = list[indexPath.row].name
+            let playableItem = list[indexPath.row]
+            cell?.textLabel?.text = playableItem.name
+            if (PlayerCore.shared.currentPlayableItem === playableItem) {
+                cell?.backgroundColor = UIColor(named: "MaxTrack")
+            }
+            else {
+                cell?.backgroundColor = UIColor(named: "Background")
+            }
         }
         return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let playlist = playlist ,
-            let playerItems = playlist.playitem,
-            indexPath.row < playerItems.count {
-            PlayerCore.shared.playWithPlayitems(playitems: playerItems, index: indexPath.row)
+        if let playlist = playlist,
+            let items = playlist.list,
+            indexPath.row < items.count {
+            PlayerCore.shared.playWithPlayitems(playitems: items, index: indexPath.row)
         }
         else {
             print("playerItem error")

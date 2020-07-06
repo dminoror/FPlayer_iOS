@@ -18,19 +18,19 @@ class LocalDatabase {
     
     required init() {
         loadPlaylists()
-        fetchPlaylists {
-            print("playlistsFetchFinished")
-            NotificationCenter.default.post(name: NSNotification.Name("playlistsFetchFinished"), object: nil)
+        let fetchQueue = DispatchQueue(label: "fetchQueue")
+        fetchQueue.async {
+            LocalDatabase.shared.fetchPlaylists(forceReload: false) {
+                print("playlistsFetchFinished")
+                NotificationCenter.default.post(name: NSNotification.Name("playlistsFetchFinished"), object: nil)
+            }
         }
-        /*
-        if (playlists == nil) {
-            fetchPlaylists(completion: nil)
-        }*/
     }
     
     
-    func fetchPlaylists(completion: (() -> Void)?) {
-        if let playlists = playlists {
+    func fetchPlaylists(forceReload: Bool, completion: (() -> Void)?) {
+        if let playlists = playlists,
+            forceReload == false {
             GDUtility.shared.fetchGDItem(playlists: playlists) { (playlists) in
                 LocalDatabase.shared.savePlaylists(playlists: playlists)
                 if let completion = completion {
@@ -48,7 +48,7 @@ class LocalDatabase {
                     if let playlists = try? JSONDecoder().decode([fpPlaylist].self, from: playlistsData) {
                         weakSelf.playlists = playlists
                         LocalDatabase.shared.savePlaylists(playlists: playlists)
-                        LocalDatabase.shared.fetchPlaylists(completion: completion)
+                        LocalDatabase.shared.fetchPlaylists(forceReload: false, completion: completion)
                         return
                     }
                 }

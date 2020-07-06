@@ -47,11 +47,11 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         remoteCenter.pauseCommand.addTarget(self, action: #selector(didPlayPauseCommand_Received))
     }
     
-    var playlist: [PlaylistItem]?
+    var playlist: [PlayableItem]?
     var playIndex = 0
-    var currentPlaylistItem: PlaylistItem?
+    var currentPlayableItem: PlayableItem?
     var currentPlayerItem: DLPlayerItem?
-    var randomPlaylist: [PlaylistItem]?
+    var randomPlaylist: [PlayableItem]?
     var randomMode: playerRandomMode = .random
     var loopMode: playerLoopMode = .loop
     
@@ -66,12 +66,22 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     func playState() -> DLCachePlayerPlayState {
         return DLCachePlayer.sharedInstance()?.playState ?? .stop
     }
+    var currentPlayableIndex: Int? {
+        get {
+            if let list = playlist,
+                let currentItem = currentPlayableItem {
+                let index = list.firstIndex() { $0 === currentItem }
+                return index
+            }
+            return nil
+        }
+    }
     var currentTitle: String? {
         get {
             if let value = currentPlayerItem?.metadata?["title"] as? String {
                 return value
             }
-            if let value = currentPlaylistItem?.name {
+            if let value = currentPlayableItem?.name {
                 return value
             }
             return nil
@@ -143,7 +153,7 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
         }
         return nil
     }
-    func getPlaylistItem(index: Int) -> PlaylistItem? {
+    func getPlayableItem(index: Int) -> PlayableItem? {
         if (randomMode == .none) {
             return playlist?[index]
         }
@@ -202,7 +212,7 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     
     
     // MARK: DLCachePlayer Delegate
-    func playWithPlayitems(playitems: [PlaylistItem]?, index: Int) {
+    func playWithPlayitems(playitems: [PlayableItem]?, index: Int) {
         playlist = playitems
         makeRandomPlaylist()
         if (randomMode == .none) {
@@ -218,12 +228,12 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     }
     
     func playerGetCurrentPlayerItem(_ block: ((DLPlayerItem?, Bool) -> DLPlayerItem?)!) {
-        if let playlistItem = getPlaylistItem(index: playIndex),
-            let url = URL.urlFromString(string: playlistItem.getPlayURL()) {
+        if let playableItem = getPlayableItem(index: playIndex),
+            let url = playableItem.playURL {
             let playerItem = DLPlayerItem()
             playerItem.url = url
-            playerItem.identify = playlistItem.identify
-            currentPlaylistItem = playlistItem
+            playerItem.identify = playableItem.identify
+            currentPlayableItem = playableItem
             currentPlayerItem = block(playerItem, true)
             if (currentPlayerItem?.metadata != nil) {
                 playerGotMetadata(currentPlayerItem, metadata: currentPlayerItem?.metadata)
@@ -233,17 +243,17 @@ class PlayerCore: NSObject, DLCachePlayerDataDelegate, DLCachePlayerStateDelegat
     
     func playerGetPreloadPlayerItem(_ block: ((DLPlayerItem?, Bool) -> DLPlayerItem?)!) {
         if let nextIndex = getNextPlayerIndex(),
-            let playlistItem = getPlaylistItem(index: nextIndex),
-            let url = URL.urlFromString(string: playlistItem.getPlayURL()) {
+            let playableItem = getPlayableItem(index: nextIndex),
+            let url = playableItem.playURL {
             let playerItem = DLPlayerItem()
-            print("preload next item: \(playlistItem.name!)")
+            print("preload next item: \(playableItem.name!)")
             playerItem.url = url
-            playerItem.identify = playlistItem.identify
+            playerItem.identify = playableItem.identify
             _ = block(playerItem, true)
         }
     }
     func playerCacheProgress(_ playerItem: DLPlayerItem!, tasks: NSMutableArray!, totalBytes: UInt) {
-        if (playerItem === currentPlaylistItem) {
+        if (playerItem === currentPlayableItem) {
             NotificationCenter.default.post(name: NSNotification.Name("playerCacheProgress"), object: ["tasks" : tasks!, "totalBytes": totalBytes])
         }
     }

@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, DLCachePlayerPlayState) {
     DLCachePlayerPlayStateReady,
     DLCachePlayerPlayStatePlaying,
     DLCachePlayerPlayStatePause,
+    DLCachePlayerPlayStateBuffering,
 };
 
 @class DLPlayerItem;
