@@ -10,6 +10,7 @@ import UIKit
 import GoogleSignIn
 import GoogleAPIClientForREST
 import GTMSessionFetcher
+import FirebaseCrashlytics
 
 enum FolderPathType {
     case Root
@@ -41,12 +42,14 @@ UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        /*
         GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance()?.scopes = [kGTLRAuthScopeDrive]
         GIDSignIn.sharedInstance()?.presentingViewController = self
         if ((GIDSignIn.sharedInstance()?.hasPreviousSignIn()) == true) {
             GIDSignIn.sharedInstance()?.restorePreviousSignIn()
-        }
+        }*/
+        
         /*
         let string = Bundle.main.path(forResource: "01. さよならメモリーズ", ofType: "flac")
         let url = URL(fileURLWithPath: string!)

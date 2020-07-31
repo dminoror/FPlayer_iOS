@@ -19,6 +19,7 @@ class ViewController: UIViewController, GIDSignInDelegate {
     var playlists: [fpPlaylist]?
     override func viewDidLoad() {
         super.viewDidLoad()
+        /*
         GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance()?.scopes = [kGTLRAuthScopeDrive]
         GIDSignIn.sharedInstance()?.presentingViewController = self
@@ -27,7 +28,7 @@ class ViewController: UIViewController, GIDSignInDelegate {
         }
         else {
             GIDSignIn.sharedInstance()?.signIn()
-        }
+        }*/
         
         //loadPlaylists()
     }
